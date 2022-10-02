@@ -1,6 +1,18 @@
 import { Barond, Square, U64 } from '../barond';
 
 describe('Barond class', () => {
+  it('countBits works as expected', () => {
+    let block: U64 = 0;
+    const barond = new Barond();
+
+    block = barond.setBit(block, Square.d7);
+    block = barond.setBit(block, Square.d2);
+    block = barond.setBit(block, Square.d1);
+    block = barond.setBit(block, Square.b4);
+    block = barond.setBit(block, Square.g4);
+
+    expect<i32>(5).toBe(barond.countBits(block));
+  });
   it('rookAttacksOnTheFly without block outputs correct value', () => {
     const barond = new Barond();
     const expected: U64[] = [

@@ -216,4 +216,15 @@ export class Barond {
 
     return attacks;
   }
+
+  countBits(bitboard: U64): i32 {
+    let count: i32 = 0;
+
+    while (bitboard) {
+      count++;
+      bitboard &= bitboard - 1;
+    }
+
+    return count;
+  }
 }
