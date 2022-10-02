@@ -244,4 +244,17 @@ export class Barond {
     }
     return -1;
   }
+
+  setOccupancy(index: i32, bitsInMask: i32, attackMask: U64): U64 {
+    let occupancy: U64 = 0;
+
+    for (let count = 0; count < bitsInMask; count++) {
+      const square = this.getLSB(attackMask) as Square;
+      attackMask = this.popBit(attackMask, square);
+      if (index & (1 << count)) {
+        occupancy |= ONE << u64(square);
+      }
+    }
+    return occupancy;
+  }
 }
