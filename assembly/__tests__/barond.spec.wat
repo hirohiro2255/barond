@@ -1,18 +1,18 @@
 (module
  (type $i32_i32_=>_none (func (param i32 i32)))
- (type $i32_=>_none (func (param i32)))
  (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i64_=>_none (func (param i32 i32 i64)))
+ (type $i32_i32_=>_i64 (func (param i32 i32) (result i64)))
  (type $i64_i32_=>_i32 (func (param i64 i32) (result i32)))
  (type $i32_i64_i32_=>_i64 (func (param i32 i64 i32) (result i64)))
  (type $i32_i32_i32_=>_i64 (func (param i32 i32 i32) (result i64)))
  (type $none_=>_i32 (func (result i32)))
- (type $i32_i32_=>_i64 (func (param i32 i32) (result i64)))
  (type $i32_i64_=>_none (func (param i32 i64)))
  (type $i64_=>_i32 (func (param i64) (result i32)))
  (type $i32_i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32 i32) (result i32)))
@@ -54,16 +54,16 @@
  (global $node_modules/@as-pect/assembly/assembly/internal/Reflect/Reflect.SUCCESSFUL_MATCH i32 (i32.const 1))
  (global $node_modules/@as-pect/assembly/assembly/internal/Reflect/Reflect.DEFER_MATCH i32 (i32.const 2))
  (global $~argumentsLength (mut i32) (i32.const 0))
- (global $node_modules/@as-pect/assembly/assembly/internal/noOp/noOp i32 (i32.const 2192))
+ (global $node_modules/@as-pect/assembly/assembly/internal/noOp/noOp i32 (i32.const 2848))
  (global $node_modules/@as-pect/assembly/assembly/internal/log/ignoreLogs (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 2336))
- (global $~lib/memory/__data_end i32 (i32.const 2412))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 18796))
- (global $~lib/memory/__heap_base i32 (i32.const 18796))
+ (global $~lib/rt/__rtti_base i32 (i32.const 2992))
+ (global $~lib/memory/__data_end i32 (i32.const 3068))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 19452))
+ (global $~lib/memory/__heap_base i32 (i32.const 19452))
  (global $~started (mut i32) (i32.const 0))
  (memory $0 1)
  (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\18\00\00\00B\00a\00r\00o\00n\00d\00 \00c\00l\00a\00s\00s\00\00\00\00\00")
- (data (i32.const 60) "L\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00<\00\00\00b\00l\00a\00c\00k\00 \00p\00a\00w\00n\00 \00a\00t\00t\00a\00c\00k\00s\00 \00a\00r\00e\00 \00c\00o\00r\00r\00e\00c\00t\00")
+ (data (i32.const 60) "L\00\00\00\00\00\00\00\00\00\00\00\01\00\00\004\00\00\00k\00n\00i\00g\00h\00t\00 \00a\00t\00t\00a\00c\00k\00s\00 \00a\00r\00e\00 \00c\00o\00r\00r\00e\00c\00t\00\00\00\00\00\00\00\00\00")
  (data (i32.const 140) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00\00\00\00\00\00\00\00\00")
  (data (i32.const 204) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00\00\00")
  (data (i32.const 252) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h\00")
@@ -74,22 +74,25 @@
  (data (i32.const 492) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00")
  (data (i32.const 544) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 572) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 636) "\1c\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\02\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\n\00\00\00\00\00\00\00\14\00\00\00\00\00\00\00(\00\00\00\00\00\00\00P\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00@\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\n\00\00\00\00\00\00\00\14\00\00\00\00\00\00\00(\00\00\00\00\00\00\00P\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00@\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\n\00\00\00\00\00\00\00\14\00\00\00\00\00\00\00(\00\00\00\00\00\00\00P\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00@\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\n\00\00\00\00\00\00\00\14\00\00\00\00\00\00\00(\00\00\00\00\00\00\00P\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00@\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\n\00\00\00\00\00\00\00\14\00\00\00\00\00\00\00(\00\00\00\00\00\00\00P\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00@\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\n\00\00\00\00\00\00\00\14\00\00\00\00\00\00\00(\00\00\00\00\00\00\00P\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00@\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\n\00\00\00\00\00\00\00\14\00\00\00\00\00\00\00(\00\00\00\00\00\00\00P\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00@\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 636) "\1c\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\04\02\00\00\00\00\00\00\08\05\00\00\00\00\00\00\11\n\00\00\00\00\00\00\"\14\00\00\00\00\00\00D(\00\00\00\00\00\00\88P\00\00\00\00\00\00\10\a0\00\00\00\00\00\00 @\00\00\00\00\00\04\00\04\02\00\00\00\00\08\00\08\05\00\00\00\00\11\00\11\n\00\00\00\00\"\00\"\14\00\00\00\00D\00D(\00\00\00\00\88\00\88P\00\00\00\00\10\00\10\a0\00\00\00\00 \00 @\00\00\00\00\02\04\00\04\02\00\00\00\05\08\00\08\05\00\00\00\n\11\00\11\n\00\00\00\14\"\00\"\14\00\00\00(D\00D(\00\00\00P\88\00\88P\00\00\00\a0\10\00\10\a0\00\00\00@ \00 @\00\00\00\00\02\04\00\04\02\00\00\00\05\08\00\08\05\00\00\00\n\11\00\11\n\00\00\00\14\"\00\"\14\00\00\00(D\00D(\00\00\00P\88\00\88P\00\00\00\a0\10\00\10\a0\00\00\00@ \00 @\00\00\00\00\02\04\00\04\02\00\00\00\05\08\00\08\05\00\00\00\n\11\00\11\n\00\00\00\14\"\00\"\14\00\00\00(D\00D(\00\00\00P\88\00\88P\00\00\00\a0\10\00\10\a0\00\00\00@ \00 @\00\00\00\00\02\04\00\04\02\00\00\00\05\08\00\08\05\00\00\00\n\11\00\11\n\00\00\00\14\"\00\"\14\00\00\00(D\00D(\00\00\00P\88\00\88P\00\00\00\a0\10\00\10\a0\00\00\00@ \00 @\00\00\00\00\02\04\00\04\00\00\00\00\05\08\00\08\00\00\00\00\n\11\00\11\00\00\00\00\14\"\00\"\00\00\00\00(D\00D\00\00\00\00P\88\00\88\00\00\00\00\a0\10\00\10\00\00\00\00@ \00 \00\00\00\00\00\02\04\00\00\00\00\00\00\05\08\00\00\00\00\00\00\n\11\00\00\00\00\00\00\14\"\00\00\00\00\00\00(D\00\00\00\00\00\00P\88\00\00\00\00\00\00\a0\10\00\00\00\00\00\00@ \00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 1180) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00u\006\004\00\00\00\00\00\00\00")
  (data (i32.const 1212) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00\00\00\00\00\00\00")
  (data (i32.const 1276) "\8c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00t\00\00\00n\00o\00d\00e\00_\00m\00o\00d\00u\00l\00e\00s\00/\00@\00a\00s\00-\00p\00e\00c\00t\00/\00a\00s\00s\00e\00m\00b\00l\00y\00/\00a\00s\00s\00e\00m\00b\00l\00y\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00s\00s\00e\00r\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00")
  (data (i32.const 1420) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 1452) "\1c\00\00\00\00\00\00\00\00\00\00\00\08\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 1484) "L\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00<\00\00\00w\00h\00i\00t\00e\00 \00p\00a\00w\00n\00 \00a\00t\00t\00a\00c\00k\00s\00 \00a\00r\00e\00 \00c\00o\00r\00r\00e\00c\00t\00")
- (data (i32.const 1564) "\1c\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\n\00\00\00\00\00\00\00\14\00\00\00\00\00\00\00(\00\00\00\00\00\00\00P\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00@\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\n\00\00\00\00\00\00\00\14\00\00\00\00\00\00\00(\00\00\00\00\00\00\00P\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00@\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\n\00\00\00\00\00\00\00\14\00\00\00\00\00\00\00(\00\00\00\00\00\00\00P\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00@\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\n\00\00\00\00\00\00\00\14\00\00\00\00\00\00\00(\00\00\00\00\00\00\00P\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00@\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\n\00\00\00\00\00\00\00\14\00\00\00\00\00\00\00(\00\00\00\00\00\00\00P\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00@\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\n\00\00\00\00\00\00\00\14\00\00\00\00\00\00\00(\00\00\00\00\00\00\00P\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00@\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\n\00\00\00\00\00\00\00\14\00\00\00\00\00\00\00(\00\00\00\00\00\00\00P\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00@\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 1484) "L\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00<\00\00\00b\00l\00a\00c\00k\00 \00p\00a\00w\00n\00 \00a\00t\00t\00a\00c\00k\00s\00 \00a\00r\00e\00 \00c\00o\00r\00r\00e\00c\00t\00")
+ (data (i32.const 1564) "\1c\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\02\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\n\00\00\00\00\00\00\00\14\00\00\00\00\00\00\00(\00\00\00\00\00\00\00P\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00@\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\n\00\00\00\00\00\00\00\14\00\00\00\00\00\00\00(\00\00\00\00\00\00\00P\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00@\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\n\00\00\00\00\00\00\00\14\00\00\00\00\00\00\00(\00\00\00\00\00\00\00P\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00@\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\n\00\00\00\00\00\00\00\14\00\00\00\00\00\00\00(\00\00\00\00\00\00\00P\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00@\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\n\00\00\00\00\00\00\00\14\00\00\00\00\00\00\00(\00\00\00\00\00\00\00P\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00@\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\n\00\00\00\00\00\00\00\14\00\00\00\00\00\00\00(\00\00\00\00\00\00\00P\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00@\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\n\00\00\00\00\00\00\00\14\00\00\00\00\00\00\00(\00\00\00\00\00\00\00P\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00@\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 2108) "\1c\00\00\00\00\00\00\00\00\00\00\00\08\00\00\00\08\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2140) "\1c\00\00\00\00\00\00\00\00\00\00\00\08\00\00\00\08\00\00\00\03\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2172) "\1c\00\00\00\00\00\00\00\00\00\00\00\08\00\00\00\08\00\00\00\04\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2204) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00*\00\00\00O\00b\00j\00e\00c\00t\00 \00a\00l\00r\00e\00a\00d\00y\00 \00p\00i\00n\00n\00e\00d\00\00\00")
- (data (i32.const 2268) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00O\00b\00j\00e\00c\00t\00 \00i\00s\00 \00n\00o\00t\00 \00p\00i\00n\00n\00e\00d\00\00\00\00\00")
- (data (i32.const 2336) "\t\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02\02\00\00\00\00\00\00\02\t\00\00\00\00\00\00 \00\00\00\00\00\00\00\10\t\02\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (table $0 5 funcref)
- (elem $0 (i32.const 1) $start:assembly/__tests__/barond.spec~anonymous|0~anonymous|0 $start:assembly/__tests__/barond.spec~anonymous|0~anonymous|1 $start:assembly/__tests__/barond.spec~anonymous|0 $start:node_modules/@as-pect/assembly/assembly/internal/noOp~anonymous|0)
+ (data (i32.const 2140) "L\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00<\00\00\00w\00h\00i\00t\00e\00 \00p\00a\00w\00n\00 \00a\00t\00t\00a\00c\00k\00s\00 \00a\00r\00e\00 \00c\00o\00r\00r\00e\00c\00t\00")
+ (data (i32.const 2220) "\1c\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\n\00\00\00\00\00\00\00\14\00\00\00\00\00\00\00(\00\00\00\00\00\00\00P\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00@\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\n\00\00\00\00\00\00\00\14\00\00\00\00\00\00\00(\00\00\00\00\00\00\00P\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00@\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\n\00\00\00\00\00\00\00\14\00\00\00\00\00\00\00(\00\00\00\00\00\00\00P\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00@\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\n\00\00\00\00\00\00\00\14\00\00\00\00\00\00\00(\00\00\00\00\00\00\00P\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00@\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\n\00\00\00\00\00\00\00\14\00\00\00\00\00\00\00(\00\00\00\00\00\00\00P\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00@\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\n\00\00\00\00\00\00\00\14\00\00\00\00\00\00\00(\00\00\00\00\00\00\00P\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00@\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\n\00\00\00\00\00\00\00\14\00\00\00\00\00\00\00(\00\00\00\00\00\00\00P\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00@\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2764) "\1c\00\00\00\00\00\00\00\00\00\00\00\08\00\00\00\08\00\00\00\03\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2796) "\1c\00\00\00\00\00\00\00\00\00\00\00\08\00\00\00\08\00\00\00\04\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2828) "\1c\00\00\00\00\00\00\00\00\00\00\00\08\00\00\00\08\00\00\00\05\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2860) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00*\00\00\00O\00b\00j\00e\00c\00t\00 \00a\00l\00r\00e\00a\00d\00y\00 \00p\00i\00n\00n\00e\00d\00\00\00")
+ (data (i32.const 2924) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00O\00b\00j\00e\00c\00t\00 \00i\00s\00 \00n\00o\00t\00 \00p\00i\00n\00n\00e\00d\00\00\00\00\00")
+ (data (i32.const 2992) "\t\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02\02\00\00\00\00\00\00\02\t\00\00\00\00\00\00 \00\00\00\00\00\00\00\10\t\02\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (table $0 6 funcref)
+ (elem $0 (i32.const 1) $start:assembly/__tests__/barond.spec~anonymous|0~anonymous|0 $start:assembly/__tests__/barond.spec~anonymous|0~anonymous|1 $start:assembly/__tests__/barond.spec~anonymous|0~anonymous|2 $start:assembly/__tests__/barond.spec~anonymous|0 $start:node_modules/@as-pect/assembly/assembly/internal/noOp~anonymous|0)
  (export "__ignoreLogs" (func $node_modules/@as-pect/assembly/assembly/internal/log/__ignoreLogs))
  (export "__new" (func $~lib/rt/itcms/__new))
  (export "__pin" (func $~lib/rt/itcms/__pin))
@@ -2522,6 +2525,140 @@
   local.get $value
   call $~lib/array/Array<u64>#__uset
  )
+ (func $assembly/barond/Barond#maskKnightAttacks (param $this i32) (param $square i32) (result i64)
+  (local $var$2 i64)
+  (local $var$3 i64)
+  i64.const 0
+  local.set $var$2
+  i64.const 0
+  local.set $var$3
+  local.get $this
+  local.get $var$3
+  local.get $square
+  call $assembly/barond/Barond#setBit
+  local.set $var$3
+  local.get $var$3
+  i64.const 17
+  i64.shr_u
+  global.get $assembly/barond/NOT_H_FILE
+  i64.and
+  i64.const 0
+  i64.ne
+  if
+   local.get $var$2
+   local.get $var$3
+   i64.const 17
+   i64.shr_u
+   i64.or
+   local.set $var$2
+  end
+  local.get $var$3
+  i64.const 15
+  i64.shr_u
+  global.get $assembly/barond/NOT_A_FILE
+  i64.and
+  i64.const 0
+  i64.ne
+  if
+   local.get $var$2
+   local.get $var$3
+   i64.const 15
+   i64.shr_u
+   i64.or
+   local.set $var$2
+  end
+  local.get $var$3
+  i64.const 10
+  i64.shr_u
+  global.get $assembly/barond/NOT_HG_FILE
+  i64.and
+  i64.const 0
+  i64.ne
+  if
+   local.get $var$2
+   local.get $var$3
+   i64.const 10
+   i64.shr_u
+   i64.or
+   local.set $var$2
+  end
+  local.get $var$3
+  i64.const 6
+  i64.shr_u
+  global.get $assembly/barond/NOT_AB_FILE
+  i64.and
+  i64.const 0
+  i64.ne
+  if
+   local.get $var$2
+   local.get $var$3
+   i64.const 6
+   i64.shr_u
+   i64.or
+   local.set $var$2
+  end
+  local.get $var$3
+  i64.const 17
+  i64.shl
+  global.get $assembly/barond/NOT_A_FILE
+  i64.and
+  i64.const 0
+  i64.ne
+  if
+   local.get $var$2
+   local.get $var$3
+   i64.const 17
+   i64.shl
+   i64.or
+   local.set $var$2
+  end
+  local.get $var$3
+  i64.const 15
+  i64.shl
+  global.get $assembly/barond/NOT_H_FILE
+  i64.and
+  i64.const 0
+  i64.ne
+  if
+   local.get $var$2
+   local.get $var$3
+   i64.const 15
+   i64.shl
+   i64.or
+   local.set $var$2
+  end
+  local.get $var$3
+  i64.const 10
+  i64.shl
+  global.get $assembly/barond/NOT_AB_FILE
+  i64.and
+  i64.const 0
+  i64.ne
+  if
+   local.get $var$2
+   local.get $var$3
+   i64.const 10
+   i64.shl
+   i64.or
+   local.set $var$2
+  end
+  local.get $var$3
+  i64.const 6
+  i64.shl
+  global.get $assembly/barond/NOT_HG_FILE
+  i64.and
+  i64.const 0
+  i64.ne
+  if
+   local.get $var$2
+   local.get $var$3
+   i64.const 6
+   i64.shl
+   i64.or
+   local.set $var$2
+  end
+  local.get $var$2
+ )
  (func $assembly/barond/Barond#set:whitePawnAttacks (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
@@ -2554,6 +2691,15 @@
   local.get $0
   local.get $1
   i32.store $0 offset=4
+  local.get $0
+  local.get $1
+  i32.const 0
+  call $~lib/rt/itcms/__link
+ )
+ (func $assembly/barond/Barond#set:knightAttacks (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  i32.store $0 offset=8
   local.get $0
   local.get $1
   i32.const 0
@@ -2764,7 +2910,7 @@
    i32.const 3
    i32.eq
    if
-    i32.const 2224
+    i32.const 2880
     i32.const 384
     i32.const 337
     i32.const 7
@@ -2796,7 +2942,7 @@
   i32.const 3
   i32.ne
   if
-   i32.const 2288
+   i32.const 2944
    i32.const 384
    i32.const 351
    i32.const 5
@@ -2880,10 +3026,10 @@
   i32.const 320
   local.get $0
   call $~lib/rt/itcms/__visit
-  i32.const 2224
+  i32.const 2880
   local.get $0
   call $~lib/rt/itcms/__visit
-  i32.const 2288
+  i32.const 2944
   local.get $0
   call $~lib/rt/itcms/__visit
  )
@@ -2910,6 +3056,14 @@
   end
   local.get $0
   i32.load $0 offset=4
+  local.tee $2
+  if
+   local.get $2
+   local.get $1
+   call $~lib/rt/itcms/__visit
+  end
+  local.get $0
+  i32.load $0 offset=8
   local.tee $2
   if
    local.get $2
@@ -3043,8 +3197,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 18816
-   i32.const 18864
+   i32.const 19472
+   i32.const 19520
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -3100,6 +3254,18 @@
     i32.const 1
     local.get $var$3
     call $assembly/barond/Barond#maskPawnAttacks
+    call $~lib/array/Array<u64>#__set
+    local.get $this
+    i32.load $0 offset=8
+    local.set $4
+    global.get $~lib/memory/__stack_pointer
+    local.get $4
+    i32.store $0
+    local.get $4
+    local.get $var$1
+    local.get $this
+    local.get $var$3
+    call $assembly/barond/Barond#maskKnightAttacks
     call $~lib/array/Array<u64>#__set
     local.get $var$1
     i32.const 1
@@ -3209,7 +3375,7 @@
     i32.store $0 offset=8
     local.get $4
     local.get $barond
-    i32.load $0 offset=4
+    i32.load $0 offset=8
     local.set $4
     global.get $~lib/memory/__stack_pointer
     local.get $4
@@ -3263,6 +3429,82 @@
   i32.const 3
   i32.const 4
   i32.const 1584
+  call $~lib/rt/__newArray
+  local.tee $expected
+  i32.store $0 offset=4
+  i32.const 0
+  local.set $var$1
+  loop $for-loop|0
+   local.get $var$1
+   i32.const 64
+   i32.lt_s
+   local.set $var$3
+   local.get $var$3
+   if
+    local.get $expected
+    local.get $var$1
+    call $~lib/array/Array<u64>#__get
+    call $node_modules/@as-pect/assembly/assembly/internal/Expectation/expect<u64>
+    local.set $4
+    global.get $~lib/memory/__stack_pointer
+    local.get $4
+    i32.store $0 offset=8
+    local.get $4
+    local.get $barond
+    i32.load $0 offset=4
+    local.set $4
+    global.get $~lib/memory/__stack_pointer
+    local.get $4
+    i32.store $0 offset=12
+    local.get $4
+    local.get $var$1
+    call $~lib/array/Array<u64>#__get
+    i32.const 1440
+    local.set $4
+    global.get $~lib/memory/__stack_pointer
+    local.get $4
+    i32.store $0 offset=12
+    local.get $4
+    call $node_modules/@as-pect/assembly/assembly/internal/Expectation/Expectation<u64>#toBe
+    local.get $var$1
+    i32.const 1
+    i32.add
+    local.set $var$1
+    br $for-loop|0
+   end
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 16
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $start:assembly/__tests__/barond.spec~anonymous|0~anonymous|2
+  (local $barond i32)
+  (local $var$1 i32)
+  (local $expected i32)
+  (local $var$3 i32)
+  (local $4 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 16
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0 offset=8
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  call $assembly/barond/Barond#constructor
+  local.tee $barond
+  i32.store $0
+  global.get $~lib/memory/__stack_pointer
+  i32.const 64
+  i32.const 3
+  i32.const 4
+  i32.const 2240
   call $~lib/rt/__newArray
   local.tee $expected
   i32.store $0 offset=4
@@ -3348,6 +3590,19 @@
   i32.store $0 offset=4
   local.get $0
   call $node_modules/@as-pect/assembly/assembly/internal/Test/it
+  i32.const 2160
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store $0
+  local.get $0
+  i32.const 2784
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store $0 offset=4
+  local.get $0
+  call $node_modules/@as-pect/assembly/assembly/internal/Test/it
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
@@ -3386,7 +3641,7 @@
   local.get $0
   i32.store $0
   local.get $0
-  i32.const 2160
+  i32.const 2816
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3502,7 +3757,7 @@
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
-   i32.const 8
+   i32.const 12
    i32.const 3
    call $~lib/rt/itcms/__new
    local.tee $this
@@ -3518,6 +3773,11 @@
   i32.const 64
   call $~lib/array/Array<u64>#constructor
   call $assembly/barond/Barond#set:blackPawnAttacks
+  local.get $this
+  i32.const 0
+  i32.const 64
+  call $~lib/array/Array<u64>#constructor
+  call $assembly/barond/Barond#set:knightAttacks
   local.get $this
   call $assembly/barond/Barond#initLeapersAttacks
   local.get $this
