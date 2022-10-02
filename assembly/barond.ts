@@ -117,4 +117,21 @@ export class Barond {
 
     return attacks;
   }
+  maskBishopAttacks(square: Square): U64 {
+    let attacks: U64 = 0;
+
+    const tr: i32 = i32(square) / 8;
+    const tf: i32 = i32(square) % 8;
+
+    for (let r = tr + 1, f = tf + 1; r <= 6 && f <= 6; r++, f++)
+      attacks |= ONE << (r * 8 + f);
+    for (let r = tr - 1, f = tf + 1; r >= 1 && f <= 6; r--, f++)
+      attacks |= ONE << (r * 8 + f);
+    for (let r = tr + 1, f = tf - 1; r <= 6 && f >= 1; r++, f--)
+      attacks |= ONE << (r * 8 + f);
+    for (let r = tr - 1, f = tf - 1; r >= 1 && f >= 1; r--, f--)
+      attacks |= ONE << (r * 8 + f);
+
+    return attacks;
+  }
 }
