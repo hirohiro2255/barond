@@ -3,6 +3,9 @@ export type U64 = u64;
 export const ONE: U64 = 1;
 
 // prettier-ignore
+export const enum Side { White, Black, Both }
+
+// prettier-ignore
 export const enum Square {
   a8, b8, c8, d8, e8, f8, g8, h8,
   a7, b7, c7, d7, e7, f7, g7, h7,
@@ -14,8 +17,24 @@ export const enum Square {
   a1, b1, c1, d1, e1, f1, g1, h1, no_sq,
 }
 
+const NOT_A_FILE: U64 = 18374403900871474942;
+const NOT_H_FILE: U64 = 9187201950435737471;
+const NOT_HG_FILE: U64 = 4557430888798830399;
+const NOT_AB_FILE: U64 = 18229723555195321596;
+
 export class Barond {
-  constructor() {}
+  whitePawnAttacks: U64[] = new Array<U64>(64);
+  blackPawnAttacks: U64[] = new Array<U64>(64);
+  constructor() {
+    this.initLeapersAttacks();
+  }
+  private initLeapersAttacks(): void {
+    for (let i = 0; i < 64; i++) {
+      const square = i as Square;
+      this.whitePawnAttacks[i] = this.maskPawnAttacks(Side.White, square);
+      this.blackPawnAttacks[i] = this.maskPawnAttacks(Side.Black, square);
+    }
+  }
   getBit(board: U64, square: Square): U64 {
     return board & (ONE << u64(square));
   }
@@ -41,5 +60,20 @@ export class Barond {
     boardRep += '\n   a b c d e f g h\n';
     boardRep += `\n   BitBoard: ${board}\n`;
     return boardRep;
+  }
+  maskPawnAttacks(side: Side, square: Square): U64 {
+    let attacks: U64 = 0;
+    let bitboard: U64 = 0;
+
+    bitboard = this.setBit(bitboard, square);
+
+    if (side == Side.White) {
+      if (((bitboard >> 7) & NOT_A_FILE) > 0) attacks |= bitboard >> 7;
+      if (((bitboard >> 9) & NOT_H_FILE) > 0) attacks |= bitboard >> 9;
+    } else if (side == Side.Black) {
+      if (((bitboard << 7) & NOT_H_FILE) > 0) attacks |= bitboard << 7;
+      if (((bitboard << 9) & NOT_A_FILE) > 0) attacks |= bitboard << 9;
+    }
+    return attacks;
   }
 }
