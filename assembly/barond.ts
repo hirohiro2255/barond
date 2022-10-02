@@ -148,4 +148,72 @@ export class Barond {
 
     return attacks;
   }
+
+  bishopAttacksOnTheFly(square: Square, block: U64): U64 {
+    let attacks: U64 = 0;
+
+    const tr: i32 = i32(square) / 8;
+    const tf: i32 = i32(square) % 8;
+
+    for (let r = tr + 1, f = tf + 1; r <= 7 && f <= 7; r++, f++) {
+      attacks |= ONE << (r * 8 + f);
+      if ((ONE << (r * 8 + f)) & block) {
+        break;
+      }
+    }
+    for (let r = tr - 1, f = tf + 1; r >= 0 && f <= 7; r--, f++) {
+      attacks |= ONE << (r * 8 + f);
+      if ((ONE << (r * 8 + f)) & block) {
+        break;
+      }
+    }
+    for (let r = tr + 1, f = tf - 1; r <= 7 && f >= 0; r++, f--) {
+      attacks |= ONE << (r * 8 + f);
+      if ((ONE << (r * 8 + f)) & block) {
+        break;
+      }
+    }
+    for (let r = tr - 1, f = tf - 1; r >= 0 && f >= 0; r--, f--) {
+      attacks |= ONE << (r * 8 + f);
+      if ((ONE << (r * 8 + f)) & block) {
+        break;
+      }
+    }
+
+    return attacks;
+  }
+
+  rookAttacksOnTheFly(square: Square, block: U64): U64 {
+    let attacks: U64 = 0;
+
+    const tr: i32 = i32(square) / 8;
+    const tf: i32 = i32(square) % 8;
+
+    for (let r = tr + 1; r <= 7; r++) {
+      attacks |= ONE << (r * 8 + tf);
+      if ((ONE << (r * 8 + tf)) & block) {
+        break;
+      }
+    }
+    for (let r = tr - 1; r >= 0; r--) {
+      attacks |= ONE << (r * 8 + tf);
+      if ((ONE << (r * 8 + tf)) & block) {
+        break;
+      }
+    }
+    for (let f = tf + 1; f <= 7; f++) {
+      attacks |= ONE << (tr * 8 + f);
+      if ((ONE << (tr * 8 + f)) & block) {
+        break;
+      }
+    }
+    for (let f = tf - 1; f >= 0; f--) {
+      attacks |= ONE << (tr * 8 + f);
+      if ((ONE << (tr * 8 + f)) & block) {
+        break;
+      }
+    }
+
+    return attacks;
+  }
 }
