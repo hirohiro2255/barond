@@ -134,4 +134,18 @@ export class Barond {
 
     return attacks;
   }
+
+  maskRookAttacks(square: Square): U64 {
+    let attacks: U64 = 0;
+
+    const tr: i32 = i32(square) / 8;
+    const tf: i32 = i32(square) % 8;
+
+    for (let r = tr + 1; r <= 6; r++) attacks |= ONE << (r * 8 + tf);
+    for (let r = tr - 1; r >= 1; r--) attacks |= ONE << (r * 8 + tf);
+    for (let f = tf + 1; f <= 6; f++) attacks |= ONE << (tr * 8 + f);
+    for (let f = tf - 1; f >= 1; f--) attacks |= ONE << (tr * 8 + f);
+
+    return attacks;
+  }
 }
