@@ -233,6 +233,9 @@ U64 pawn_attacks[2][64];
 // knight attacks table [square]
 U64 knight_attacks[64];
 
+// king attacks table [square]
+U64 king_attacks[64];
+
 // generate pawn attacks
 U64 mask_pawn_attacks(int side, int square) {
   // result attacks bitboard
@@ -287,6 +290,31 @@ U64 mask_knight_attacks(int square) {
   return attacks;
 }
 
+// generate king attacks
+U64 mask_king_attacks(int square) {
+  // result attacks bitboard
+  U64 attacks = 0ULL;
+
+  // piece bitboard
+  U64 bitboard = 0ULL;
+
+  // set piece on board
+  set_bit(bitboard, square);
+
+  // generate king attacks
+  if (bitboard >> 8) attacks |= (bitboard >> 8);
+  if ((bitboard >> 9) & not_h_file) attacks |= (bitboard >> 9);
+  if ((bitboard >> 7) & not_a_file) attacks |= (bitboard >> 7);
+  if ((bitboard >> 1) & not_h_file) attacks |= (bitboard >> 1);
+  if (bitboard << 8) attacks |= (bitboard << 8);
+  if ((bitboard << 9) & not_a_file) attacks |= (bitboard << 9);
+  if ((bitboard << 7) & not_h_file) attacks |= (bitboard << 7);
+  if ((bitboard << 1) & not_a_file) attacks |= (bitboard << 1);
+
+  // return attack map
+  return attacks;
+}
+
 // init leaper pieces attacks
 void init_leapers_attacks() {
   // loop over 64 board squares
@@ -297,6 +325,9 @@ void init_leapers_attacks() {
 
     // init knight attacks
     knight_attacks[square] = mask_knight_attacks(square);
+
+    // init king attacks
+    king_attacks[square] = mask_king_attacks(square);
   }
 }
 
@@ -314,7 +345,7 @@ int main() {
 
   // loop over 64 board squares
   for (int square = 0; square < 64; square++)
-    printf("%llu,\n", knight_attacks[square]);
+    printf("%llu,\n", king_attacks[square]);
 
   return 0;
 }

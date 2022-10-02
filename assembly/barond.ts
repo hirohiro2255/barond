@@ -26,6 +26,7 @@ export class Barond {
   whitePawnAttacks: U64[] = new Array<U64>(64);
   blackPawnAttacks: U64[] = new Array<U64>(64);
   knightAttacks: U64[] = new Array<U64>(64);
+  kingAttacks: U64[] = new Array<U64>(64);
   constructor() {
     this.initLeapersAttacks();
   }
@@ -35,6 +36,7 @@ export class Barond {
       this.whitePawnAttacks[i] = this.maskPawnAttacks(Side.White, square);
       this.blackPawnAttacks[i] = this.maskPawnAttacks(Side.Black, square);
       this.knightAttacks[i] = this.maskKnightAttacks(square);
+      this.kingAttacks[i] = this.maskKingAttacks(square);
     }
   }
   getBit(board: U64, square: Square): U64 {
@@ -94,6 +96,24 @@ export class Barond {
     if ((bitboard << 15) & NOT_H_FILE) attacks |= bitboard << 15;
     if ((bitboard << 10) & NOT_AB_FILE) attacks |= bitboard << 10;
     if ((bitboard << 6) & NOT_HG_FILE) attacks |= bitboard << 6;
+
+    return attacks;
+  }
+
+  maskKingAttacks(square: Square): U64 {
+    let attacks: U64 = 0;
+    let bitboard: U64 = 0;
+
+    bitboard = this.setBit(bitboard, square);
+
+    if (bitboard >> 8) attacks |= bitboard >> 8;
+    if ((bitboard >> 9) & NOT_H_FILE) attacks |= bitboard >> 9;
+    if ((bitboard >> 7) & NOT_A_FILE) attacks |= bitboard >> 7;
+    if ((bitboard >> 1) & NOT_H_FILE) attacks |= bitboard >> 1;
+    if (bitboard << 8) attacks |= bitboard << 8;
+    if ((bitboard << 9) & NOT_A_FILE) attacks |= bitboard << 9;
+    if ((bitboard << 7) & NOT_H_FILE) attacks |= bitboard << 7;
+    if ((bitboard << 1) & NOT_A_FILE) attacks |= bitboard << 1;
 
     return attacks;
   }
