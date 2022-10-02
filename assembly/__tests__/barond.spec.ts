@@ -1,6 +1,17 @@
-import { Barond, Square, U64 } from '../barond';
+import { Barond, Square, SQ_TO_COORD, U64 } from '../barond';
 
 describe('Barond class', () => {
+  it('getLSB works as expected', () => {
+    const barond = new Barond();
+    let block: U64 = 0;
+    block = barond.setBit(block, Square.d7);
+    block = barond.setBit(block, Square.d2);
+    block = barond.setBit(block, Square.d1);
+    block = barond.setBit(block, Square.b4);
+    block = barond.setBit(block, Square.g4);
+    expect<i32>(11).toBe(barond.getLSB(block));
+    expect<string>('d7').toBe(SQ_TO_COORD[barond.getLSB(block)]);
+  });
   it('countBits works as expected', () => {
     let block: U64 = 0;
     const barond = new Barond();
