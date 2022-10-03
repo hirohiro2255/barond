@@ -2,7 +2,11 @@
 import {
   U64,
   Square,
+  SlidingPiece,
   Barond,
+  ROOK_RELEVANT_BITS,
+  ROOK_MAGIC_NUMBERS,
+  BISHOP_MAGIC_NUMBERS,
   getRandomU32Number,
   getRandomU64Number,
   generateMagicNumber,
@@ -13,9 +17,7 @@ export function add(a: i32, b: i32): i32 {
 }
 
 export function main(): void {
-  const barond = new Barond();
-  barond.printBitBoard(u64(getRandomU32Number()));
-  barond.printBitBoard(u64(getRandomU32Number()) & 0xffff);
-  barond.printBitBoard(getRandomU64Number());
-  barond.printBitBoard(generateMagicNumber());
+  for (let i = 0; i < 64; i++) {
+    console.log(ROOK_MAGIC_NUMBERS[i].toString(16));
+  }
 }

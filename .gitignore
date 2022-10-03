@@ -11,3 +11,5 @@ cli/index.generated.js
 src/diagnosticMessages.generated.ts
 coverage/
 bbc
+*.wasm
+*.wat
