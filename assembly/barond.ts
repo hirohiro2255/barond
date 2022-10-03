@@ -32,6 +32,29 @@ const NOT_H_FILE: U64 = 9187201950435737471;
 const NOT_HG_FILE: U64 = 4557430888798830399;
 const NOT_AB_FILE: U64 = 18229723555195321596;
 
+let state: u32 = 1804289383;
+export function getRandomU32Number(): u32 {
+  let n: u32 = state;
+  n ^= n << 13;
+  n ^= n >> 17;
+  n ^= n << 5;
+  state = n;
+  return n;
+}
+
+export function getRandomU64Number(): U64 {
+  let n1: U64 = u64(getRandomU32Number()) & 0xffff;
+  let n2: U64 = u64(getRandomU32Number()) & 0xffff;
+  let n3: U64 = u64(getRandomU32Number()) & 0xffff;
+  let n4: U64 = u64(getRandomU32Number()) & 0xffff;
+
+  return n1 | (n2 << 16) | (n3 << 32) | (n4 << 48);
+}
+
+export function generateMagicNumber(): U64 {
+  return getRandomU64Number() & getRandomU64Number() & getRandomU64Number();
+}
+
 export class Barond {
   whitePawnAttacks: U64[] = new Array<U64>(64);
   blackPawnAttacks: U64[] = new Array<U64>(64);
