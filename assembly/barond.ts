@@ -190,7 +190,7 @@ export function generateMagicNumber(): U64 {
 export class Barond {
   bitboards: U64[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   occupancies: U64[] = [0, 0, 0];
-  side: Side = -1;
+  side: Side = Side.White;
   enpassant: Square = Square.no_sq;
   castle: i32 = 0;
   whitePawnAttacks: U64[] = new Array<U64>(64);
@@ -290,7 +290,62 @@ export class Barond {
   popBit(board: U64, square: Square): U64 {
     return (board &= ~(ONE << u64(square)));
   }
-  printBitBoard(board: U64): string {
+  printBoard(): void {
+    for (let rank = 0; rank < 8; rank++) {
+      let r = '';
+      for (let file = 0; file < 8; file++) {
+        const square = (rank * 8 + file) as Square;
+        let piece = -1;
+
+        if (file == 0) {
+          r += `${8 - rank} `;
+        }
+        const whitePawns: i32 = Piece.WHITE_PAWNS;
+        const blackKing: i32 = Piece.BLACK_KING;
+        for (let bbPiece = whitePawns; bbPiece <= blackKing; bbPiece++) {
+          if (this.getBit(this.bitboards[bbPiece], square) > 0) {
+            piece = bbPiece;
+          }
+        }
+
+        r += `${piece === -1 ? '. ' : `${UNICODE_PIECES[piece]} `}`;
+      }
+      console.log(r);
+    }
+    let castleRights = '';
+    if (this.castle & Castle.WHITE_KSIDE) {
+      castleRights += 'K';
+    } else {
+      castleRights += '-';
+    }
+    if (this.castle & Castle.WHITE_QSIDE) {
+      castleRights += 'Q';
+    } else {
+      castleRights += '-';
+    }
+    if (this.castle & Castle.BLACK_KSIDE) {
+      castleRights += 'k';
+    } else {
+      castleRights += '-';
+    }
+    if (this.castle & Castle.BLACK_QSIDE) {
+      castleRights += 'q';
+    } else {
+      castleRights += '-';
+    }
+    console.log('\n');
+    console.log('  a b c d e f g h');
+    console.log(
+      `Side to move: ${this.side === Side.White ? 'white' : 'black'}`
+    );
+    console.log(
+      `En passant: ${
+        this.enpassant !== Square.no_sq ? SQ_TO_COORD[this.enpassant] : 'no'
+      }`
+    );
+    console.log(`Castling Rights: ${castleRights}`);
+  }
+  printBitBoard(board: U64): void {
     let boardRep = '';
     for (let r = 0; r < 8; r++) {
       let rank = '';
@@ -305,7 +360,7 @@ export class Barond {
     }
     boardRep += '\n   a b c d e f g h\n';
     boardRep += `\n   BitBoard: ${board}\n`;
-    return boardRep;
+    console.log(boardRep);
   }
   maskPawnAttacks(side: Side, square: Square): U64 {
     let attacks: U64 = 0;
