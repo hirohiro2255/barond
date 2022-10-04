@@ -17,7 +17,9 @@ export function add(a: i32, b: i32): i32 {
 }
 
 export function main(): void {
+  const barond = new Barond();
+
   for (let i = 0; i < 64; i++) {
-    console.log(ROOK_MAGIC_NUMBERS[i].toString(16));
+    console.log(barond.getBishopAttacks(i as Square, 0).toString());
   }
 }

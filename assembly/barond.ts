@@ -131,8 +131,80 @@ export class Barond {
   blackPawnAttacks: U64[] = new Array<U64>(64);
   knightAttacks: U64[] = new Array<U64>(64);
   kingAttacks: U64[] = new Array<U64>(64);
+  bishopMasks: U64[] = new Array<U64>(64);
+  rookMasks: U64[] = new Array<U64>(64);
+  bishopAttacks: U64[][] = [];
+  rookAttacks: U64[][] = [];
   constructor() {
     this.initLeapersAttacks();
+    this.initSlidersAttacks(SlidingPiece.Rook);
+    this.initSlidersAttacks(SlidingPiece.Bishop);
+  }
+  private initSlidersAttacks(bishop: SlidingPiece): void {
+    //   bishopMasks: U64[] = [];
+    // rookMasks: U64[] = [];
+    // bishopAttacks: U64[][] = [];
+    // rookAttacks: U64[][] =
+    // [];
+    for (let i = 0; i < 64; i++) {
+      const bishopAttacksTemps = new Array<U64>(512);
+      const rookAttacksTemps = new Array<U64>(4096);
+      this.bishopMasks.push(0);
+      this.rookMasks.push(0);
+      // this.bishopAttacks[i].push(bishopAttacksTemps);
+      // this.rookAttacks[i] = [];
+      for (let j = 0; j < 512; j++) {
+        bishopAttacksTemps.push(0);
+      }
+      this.bishopAttacks.push(bishopAttacksTemps);
+      for (let j = 0; j < 4096; j++) {
+        rookAttacksTemps.push(0);
+      }
+      this.rookAttacks.push(rookAttacksTemps);
+    }
+
+    for (let square = 0; square < 64; square++) {
+      this.bishopMasks[square] = this.maskBishopAttacks(square as Square);
+      this.rookMasks[square] = this.maskRookAttacks(square as Square);
+
+      const attackMask: U64 =
+        bishop === SlidingPiece.Bishop
+          ? this.bishopMasks[square]
+          : this.rookMasks[square];
+
+      const relevantBitsCount: i32 = this.countBits(attackMask);
+
+      const occupancyIndicies: i32 = 1 << relevantBitsCount;
+
+      for (let index = 0; index < occupancyIndicies; index++) {
+        if (bishop === SlidingPiece.Bishop) {
+          const occupancy: U64 = this.setOccupancy(
+            index,
+            relevantBitsCount,
+            attackMask
+          );
+          const magicIndex =
+            (occupancy * BISHOP_MAGIC_NUMBERS[square]) >>
+            (64 - BISHOP_RELEVANT_BITS[square]);
+
+          this.bishopAttacks[square][i32(magicIndex)] =
+            this.bishopAttacksOnTheFly(square as Square, occupancy);
+        } else {
+          const occupancy: U64 = this.setOccupancy(
+            index,
+            relevantBitsCount,
+            attackMask
+          );
+          const magicIndex =
+            (occupancy * ROOK_MAGIC_NUMBERS[square]) >>
+            (64 - ROOK_RELEVANT_BITS[square]);
+          this.rookAttacks[square][i32(magicIndex)] = this.rookAttacksOnTheFly(
+            square as Square,
+            occupancy
+          );
+        }
+      }
+    }
   }
   private initLeapersAttacks(): void {
     for (let i = 0; i < 64; i++) {
@@ -409,5 +481,19 @@ export class Barond {
       }
     }
     return 0 as U64;
+  }
+
+  getBishopAttacks(square: Square, occupancy: U64): U64 {
+    occupancy &= this.bishopMasks[square];
+    occupancy *= BISHOP_MAGIC_NUMBERS[square];
+    occupancy >>= 64 - BISHOP_RELEVANT_BITS[square];
+    return this.bishopAttacks[square as i32][i32(occupancy)];
+  }
+
+  getRookAttacks(square: Square, occupancy: U64): U64 {
+    occupancy &= this.rookMasks[square];
+    occupancy *= ROOK_MAGIC_NUMBERS[square];
+    occupancy >>= 64 - ROOK_RELEVANT_BITS[square];
+    return this.rookAttacks[square as i32][i32(occupancy)];
   }
 }
