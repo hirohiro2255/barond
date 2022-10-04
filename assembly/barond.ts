@@ -7,6 +7,67 @@ export const enum Side { White, Black, Both }
 // prettier-ignore
 export const enum SlidingPiece { Rook, Bishop }
 
+// prettier-ignore
+export const enum Piece {
+  WHITE_PAWNS,WHITE_KNIGHTS,WHITE_BISHOPS,WHITE_ROOKS,WHITE_QUEEN,WHITE_KING,
+  BLACK_PAWNS,BLACK_KNIGHTS,BLACK_BISHOPS,BLACK_ROOKS,BLACK_QUEEN,BLACK_KING,
+}
+
+export const CHAR_PIECES = new Map<string, Piece>();
+CHAR_PIECES.set('P', Piece.WHITE_PAWNS);
+CHAR_PIECES.set('N', Piece.WHITE_KNIGHTS);
+CHAR_PIECES.set('B', Piece.WHITE_BISHOPS);
+CHAR_PIECES.set('R', Piece.WHITE_ROOKS);
+CHAR_PIECES.set('Q', Piece.WHITE_QUEEN);
+CHAR_PIECES.set('K', Piece.WHITE_KING);
+CHAR_PIECES.set('p', Piece.BLACK_PAWNS);
+CHAR_PIECES.set('n', Piece.BLACK_KNIGHTS);
+CHAR_PIECES.set('b', Piece.BLACK_BISHOPS);
+CHAR_PIECES.set('r', Piece.BLACK_ROOKS);
+CHAR_PIECES.set('q', Piece.BLACK_QUEEN);
+CHAR_PIECES.set('k', Piece.BLACK_KING);
+
+// export const CHAR_PIECES: Map<string, Piece> = {
+//   P: Piece.WHITE_PAWNS,
+//   N: Piece.WHITE_KNIGHTS,
+//   B: Piece.WHITE_BISHOPS,
+//   R: Piece.WHITE_ROOKS,
+//   Q: Piece.WHITE_QUEEN,
+//   K: Piece.WHITE_KING,
+//   p: Piece.BLACK_PAWNS,
+//   n: Piece.BLACK_KNIGHTS,
+//   b: Piece.BLACK_BISHOPS,
+//   r: Piece.BLACK_ROOKS,
+//   q: Piece.BLACK_QUEEN,
+//   k: Piece.BLACK_KING,
+// };
+
+export const enum Castle {
+  WHITE_KSIDE = 1,
+  WHITE_QSIDE = 2,
+  BLACK_KSIDE = 4,
+  BLACK_QSIDE = 8,
+}
+
+// ASCII pieces
+export const ASCII_PIECES: string = 'PNBRQKpnbrqk';
+
+// unicode pieces
+export const UNICODE_PIECES: string[] = [
+  '♙',
+  '♘',
+  '♗',
+  '♖',
+  '♕',
+  '♔',
+  '♟︎',
+  '♞',
+  '♝',
+  '♜',
+  '♛',
+  '♚',
+];
+
 export const BISHOP_MAGIC_NUMBERS: U64[] = [
   18018832060792964, 9011737055478280, 4531088509108738, 74316026439016464,
   396616115700105744, 2382975967281807376, 1189093273034424848,
@@ -127,6 +188,11 @@ export function generateMagicNumber(): U64 {
 }
 
 export class Barond {
+  bitboards: U64[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  occupancies: U64[] = [0, 0, 0];
+  side: Side = -1;
+  enpassant: Square = Square.no_sq;
+  castle: i32 = 0;
   whitePawnAttacks: U64[] = new Array<U64>(64);
   blackPawnAttacks: U64[] = new Array<U64>(64);
   knightAttacks: U64[] = new Array<U64>(64);

@@ -2,6 +2,7 @@
 import {
   U64,
   Square,
+  Piece,
   SlidingPiece,
   Barond,
   ROOK_RELEVANT_BITS,
@@ -10,6 +11,7 @@ import {
   getRandomU32Number,
   getRandomU64Number,
   generateMagicNumber,
+  ASCII_PIECES,
 } from './barond';
 
 export function add(a: i32, b: i32): i32 {
@@ -18,8 +20,10 @@ export function add(a: i32, b: i32): i32 {
 
 export function main(): void {
   const barond = new Barond();
+  barond.bitboards[Piece.WHITE_PAWNS] = barond.setBit(
+    barond.bitboards[Piece.WHITE_PAWNS],
+    Square.e2
+  );
 
-  for (let i = 0; i < 64; i++) {
-    console.log(barond.getBishopAttacks(i as Square, 0).toString());
-  }
+  console.log(barond.printBitBoard(barond.bitboards[Piece.WHITE_PAWNS]));
 }
