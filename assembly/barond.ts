@@ -767,4 +767,25 @@ export class Barond {
     this.occupancies[bothToMove] |= this.occupancies[whiteToMove];
     this.occupancies[bothToMove] |= this.occupancies[blackToMove];
   }
+
+  getQueenAttacks(square: Square, occupancy: U64): U64 {
+    let queenAttacks: U64 = 0;
+
+    let bishopOccupancy = occupancy;
+    let rookOccupancy = occupancy;
+
+    bishopOccupancy &= this.bishopMasks[i32(square)];
+    bishopOccupancy *= BISHOP_MAGIC_NUMBERS[i32(square)];
+    bishopOccupancy >>= 64 - BISHOP_RELEVANT_BITS[i32(square)];
+
+    queenAttacks = this.bishopAttacks[i32(square)][i32(bishopOccupancy)];
+
+    rookOccupancy &= this.rookMasks[i32(square)];
+    rookOccupancy *= ROOK_MAGIC_NUMBERS[i32(square)];
+    rookOccupancy >>= 64 - ROOK_RELEVANT_BITS[i32(square)];
+
+    queenAttacks |= this.rookAttacks[i32(square)][i32(rookOccupancy)];
+
+    return queenAttacks;
+  }
 }
