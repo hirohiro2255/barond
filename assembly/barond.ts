@@ -147,6 +147,79 @@ export const SQ_TO_COORD: string[] = [
   "h2", "a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1",
 ];
 
+export const NOTATION_TO_INDEX = new Map<string, U64>();
+NOTATION_TO_INDEX.set('a8', 0);
+NOTATION_TO_INDEX.set('b8', 1);
+NOTATION_TO_INDEX.set('c8', 2);
+NOTATION_TO_INDEX.set('d8', 3);
+NOTATION_TO_INDEX.set('e8', 4);
+NOTATION_TO_INDEX.set('f8', 5);
+NOTATION_TO_INDEX.set('g8', 6);
+NOTATION_TO_INDEX.set('h8', 7);
+
+NOTATION_TO_INDEX.set('a7', 8);
+NOTATION_TO_INDEX.set('b7', 9);
+NOTATION_TO_INDEX.set('c7', 10);
+NOTATION_TO_INDEX.set('d7', 11);
+NOTATION_TO_INDEX.set('e7', 12);
+NOTATION_TO_INDEX.set('f7', 13);
+NOTATION_TO_INDEX.set('g7', 14);
+NOTATION_TO_INDEX.set('h7', 15);
+
+NOTATION_TO_INDEX.set('a6', 16);
+NOTATION_TO_INDEX.set('b6', 17);
+NOTATION_TO_INDEX.set('c6', 18);
+NOTATION_TO_INDEX.set('d6', 19);
+NOTATION_TO_INDEX.set('e6', 20);
+NOTATION_TO_INDEX.set('f6', 21);
+NOTATION_TO_INDEX.set('g6', 22);
+NOTATION_TO_INDEX.set('h6', 23);
+
+NOTATION_TO_INDEX.set('a5', 24);
+NOTATION_TO_INDEX.set('b5', 25);
+NOTATION_TO_INDEX.set('c5', 26);
+NOTATION_TO_INDEX.set('d5', 27);
+NOTATION_TO_INDEX.set('e5', 28);
+NOTATION_TO_INDEX.set('f5', 29);
+NOTATION_TO_INDEX.set('g5', 30);
+NOTATION_TO_INDEX.set('h5', 31);
+
+NOTATION_TO_INDEX.set('a4', 32);
+NOTATION_TO_INDEX.set('b4', 33);
+NOTATION_TO_INDEX.set('c4', 34);
+NOTATION_TO_INDEX.set('d4', 35);
+NOTATION_TO_INDEX.set('e4', 36);
+NOTATION_TO_INDEX.set('f4', 37);
+NOTATION_TO_INDEX.set('g4', 38);
+NOTATION_TO_INDEX.set('h4', 39);
+
+NOTATION_TO_INDEX.set('a3', 40);
+NOTATION_TO_INDEX.set('b3', 41);
+NOTATION_TO_INDEX.set('c3', 42);
+NOTATION_TO_INDEX.set('d3', 43);
+NOTATION_TO_INDEX.set('e3', 44);
+NOTATION_TO_INDEX.set('f3', 45);
+NOTATION_TO_INDEX.set('g3', 46);
+NOTATION_TO_INDEX.set('h3', 47);
+
+NOTATION_TO_INDEX.set('a2', 48);
+NOTATION_TO_INDEX.set('b2', 49);
+NOTATION_TO_INDEX.set('c2', 50);
+NOTATION_TO_INDEX.set('d2', 51);
+NOTATION_TO_INDEX.set('e2', 52);
+NOTATION_TO_INDEX.set('f2', 53);
+NOTATION_TO_INDEX.set('g2', 54);
+NOTATION_TO_INDEX.set('h2', 55);
+
+NOTATION_TO_INDEX.set('a1', 56);
+NOTATION_TO_INDEX.set('b1', 57);
+NOTATION_TO_INDEX.set('c1', 58);
+NOTATION_TO_INDEX.set('d1', 59);
+NOTATION_TO_INDEX.set('e1', 60);
+NOTATION_TO_INDEX.set('f1', 61);
+NOTATION_TO_INDEX.set('g1', 62);
+NOTATION_TO_INDEX.set('h1', 63);
+
 // prettier-ignore
 export const enum Square {
   a8, b8, c8, d8, e8, f8, g8, h8,
@@ -616,5 +689,82 @@ export class Barond {
     occupancy *= ROOK_MAGIC_NUMBERS[square];
     occupancy >>= 64 - ROOK_RELEVANT_BITS[square];
     return this.rookAttacks[square as i32][i32(occupancy)];
+  }
+
+  parseFen(fen: string): void {
+    for (let i = 0; i < this.bitboards.length; i++) {
+      this.bitboards[i] = 0;
+    }
+    for (let i = 0; i < this.occupancies.length; i++) {
+      this.occupancies[i] = 0;
+    }
+    this.side = Side.White;
+    this.enpassant = Square.no_sq;
+    this.castle = 0;
+
+    let pieces = fen.split(' ')[0].split('/');
+
+    for (let rank = 0; rank < 8; rank++) {
+      let piecesRank = pieces[rank];
+      let file = 0;
+      for (let i = 0; i < piecesRank.length; i++) {
+        const square: Square = rank * 8 + file;
+        const piece = piecesRank.at(i);
+        if (piece.toLowerCase() >= 'a' && piece.toLowerCase() <= 'z') {
+          const pieceType = CHAR_PIECES.get(piece);
+          this.bitboards[pieceType] = this.setBit(
+            this.bitboards[pieceType],
+            square
+          );
+          file++;
+        } else if (piece >= '1' && piece <= '8') {
+          file += i32(parseInt(piece, 10));
+        } else {
+          console.error(`Invalid FEN character: ${piece}`);
+        }
+      }
+    }
+    this.side = fen.split(' ')[1] === 'w' ? Side.White : Side.Black;
+    const castleStr = fen.split(' ')[2];
+    for (let i = 0; i < castleStr.length; i++) {
+      if (castleStr.at(i) === 'K') {
+        this.castle |= Castle.WHITE_KSIDE;
+      }
+      if (castleStr.at(i) === 'Q') {
+        this.castle |= Castle.WHITE_QSIDE;
+      }
+      if (castleStr.at(i) === 'k') {
+        this.castle |= Castle.BLACK_KSIDE;
+      }
+      if (castleStr.at(i) === 'q') {
+        this.castle |= Castle.BLACK_QSIDE;
+      }
+    }
+
+    const enpasSquare = fen.split(' ')[3];
+    if (enpasSquare !== '-') {
+      console.log(enpasSquare.trim());
+      const enpasIndex = NOTATION_TO_INDEX.get(enpasSquare.trim());
+      console.log(enpasIndex.toString());
+      this.enpassant = enpasIndex as Square;
+    } else {
+      this.enpassant = Square.no_sq;
+    }
+
+    const whitePawns = Piece.WHITE_PAWNS;
+    const whiteKing = Piece.WHITE_KING;
+    const blackPawns = Piece.BLACK_PAWNS;
+    const blackKing = Piece.BLACK_KING;
+    const whiteToMove = Side.White;
+    const blackToMove = Side.Black;
+    const bothToMove = Side.Both;
+    for (let piece = whitePawns; piece <= whiteKing; piece++) {
+      this.occupancies[whiteToMove] |= this.bitboards[piece];
+    }
+    for (let piece = blackPawns; piece <= blackKing; piece++) {
+      this.occupancies[blackToMove] |= this.bitboards[piece];
+    }
+    this.occupancies[bothToMove] |= this.occupancies[whiteToMove];
+    this.occupancies[bothToMove] |= this.occupancies[blackToMove];
   }
 }

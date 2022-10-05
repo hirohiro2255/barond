@@ -21,47 +21,25 @@ export function add(a: i32, b: i32): i32 {
 }
 
 export function main(): void {
+  const EMPTY_BOARD = '8/8/8/8/8/8/8/8 w - - ';
+  const START_POSITION =
+    'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 ';
+  const TRICKY_POSITION =
+    'r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1 ';
+  const KILLER_POSITION =
+    'rnbqkb1r/pp1p1pPp/8/2p1pP2/1P1P4/3P3P/P1P1P3/RNBQKBNR w KQkq e6 0 1';
+  const CMK_POSITION =
+    'r2q1rk1/ppp2ppp/2n1bn2/2b1p3/3pP3/3P1NPP/PPP1NPB1/R1BQ1RK1 b - - 0 9 ';
+
   const barond = new Barond();
-  barond.bitboards[Piece.WHITE_PAWNS] = barond.setBit(
-    barond.bitboards[Piece.WHITE_PAWNS],
-    Square.a2
-  );
-  barond.bitboards[Piece.WHITE_PAWNS] = barond.setBit(
-    barond.bitboards[Piece.WHITE_PAWNS],
-    Square.b2
-  );
-  barond.bitboards[Piece.WHITE_PAWNS] = barond.setBit(
-    barond.bitboards[Piece.WHITE_PAWNS],
-    Square.c2
-  );
-  barond.bitboards[Piece.WHITE_PAWNS] = barond.setBit(
-    barond.bitboards[Piece.WHITE_PAWNS],
-    Square.d2
-  );
-  barond.bitboards[Piece.WHITE_PAWNS] = barond.setBit(
-    barond.bitboards[Piece.WHITE_PAWNS],
-    Square.e2
-  );
-  barond.bitboards[Piece.WHITE_PAWNS] = barond.setBit(
-    barond.bitboards[Piece.WHITE_PAWNS],
-    Square.f2
-  );
-  barond.bitboards[Piece.WHITE_PAWNS] = barond.setBit(
-    barond.bitboards[Piece.WHITE_PAWNS],
-    Square.g2
-  );
-  barond.bitboards[Piece.WHITE_PAWNS] = barond.setBit(
-    barond.bitboards[Piece.WHITE_PAWNS],
-    Square.h2
-  );
-
-  barond.side = Side.Black;
-  barond.enpassant = Square.e3;
-
-  barond.castle |= Castle.WHITE_KSIDE;
-  barond.castle |= Castle.WHITE_QSIDE;
-  barond.castle |= Castle.BLACK_KSIDE;
-  barond.castle |= Castle.BLACK_QSIDE;
-
+  barond.parseFen(TRICKY_POSITION);
   barond.printBoard();
+  barond.printBitBoard(barond.occupancies[i32(Side.White)]);
+  barond.printBitBoard(barond.occupancies[i32(Side.Black)]);
+  // const side = KILLER_POSITION.split(' ')[1];
+  // const castle = KILLER_POSITION.split(' ')[2];
+  // const enpas = KILLER_POSITION.split(' ')[3];
+  // console.log(side);
+  // console.log(castle);
+  // console.log(enpas);
 }
