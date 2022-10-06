@@ -25,7 +25,7 @@ export function main(): void {
   const START_POSITION =
     'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 ';
   const TRICKY_POSITION =
-    'r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1 ';
+    'r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1 ';
   const KILLER_POSITION =
     'rnbqkb1r/pp1p1pPp/8/2p1pP2/1P1P4/3P3P/P1P1P3/RNBQKBNR w KQkq e6 0 1';
   const CMK_POSITION =
@@ -34,7 +34,8 @@ export function main(): void {
   const barond = new Barond();
   barond.parseFen(TRICKY_POSITION);
   barond.printBoard();
-  barond.printAttackedSquares(Side.Black);
+  barond.generateMoves();
+  // barond.printAttackedSquares(Side.Black);
   // const side = KILLER_POSITION.split(' ')[1];
   // const castle = KILLER_POSITION.split(' ')[2];
   // const enpas = KILLER_POSITION.split(' ')[3];

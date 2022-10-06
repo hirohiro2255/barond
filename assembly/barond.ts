@@ -416,7 +416,7 @@ export class Barond {
         this.enpassant !== Square.no_sq ? SQ_TO_COORD[this.enpassant] : 'no'
       }`
     );
-    console.log(`Castling Rights: ${castleRights}`);
+    console.log(`Castling Rights: ${castleRights}\n\n`);
   }
   printBitBoard(board: U64): void {
     let boardRep = '';
@@ -1011,8 +1011,99 @@ export class Barond {
 
       // generate white pawns and white king castling moves
       if (this.side === whiteToMove) {
+        // pick up white pawn bitboards index
+        if (piece === whitePawns) {
+          // loop over white pawns within pawn bitboard
+          while (bitboard > 0) {
+            // init source square
+            from = this.getLSB(bitboard);
+            // init target square
+            to = from - 8;
+
+            // generate quiet pawn moves
+            let isOccupied = this.getBit(this.occupancies[bothToMove], to) > 0;
+            if (!(to < a8) && !isOccupied) {
+              // pawn promotion
+              if (from >= a7 && from <= h7) {
+                console.log(
+                  `pawn promotion: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}q`
+                );
+                console.log(
+                  `pawn promotion: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}r`
+                );
+                console.log(
+                  `pawn promotion: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}b`
+                );
+                console.log(
+                  `pawn promotion: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}n`
+                );
+              } else {
+                // one square ahead pawn move
+                console.log(
+                  `pawn push: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}`
+                );
+                // two squares ahead pawn move
+                isOccupied =
+                  this.getBit(this.occupancies[bothToMove], to - 8) > 0;
+                if (from >= a2 && from <= h2 && !isOccupied) {
+                  console.log(
+                    `double pawn push: ${SQ_TO_COORD[from]}${
+                      SQ_TO_COORD[to - 8]
+                    }`
+                  );
+                }
+              }
+            }
+            bitboard = this.popBit(bitboard, from as Square);
+          }
+        }
       } else if (this.side === blackToMove) {
         // generate black pawns and black king castling moves
+        if (piece === blackPawns) {
+          // loop over black pawns within black pawn bitboard
+          while (bitboard > 0) {
+            // init source square
+            from = this.getLSB(bitboard);
+            // init target square
+            to = from + 8;
+            // generate quiet pawn moves
+            let isOccupied = this.getBit(this.occupancies[bothToMove], to) > 0;
+            if (!(to > h1) && !isOccupied) {
+              // pawn promotion
+              if (from >= a2 && from <= h2) {
+                console.log(
+                  `pawn promotion: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}q`
+                );
+                console.log(
+                  `pawn promotion: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}r`
+                );
+                console.log(
+                  `pawn promotion: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}b`
+                );
+                console.log(
+                  `pawn promotion: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}n`
+                );
+              } else {
+                // one square ahead pawn move
+                console.log(
+                  `pawn push: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}`
+                );
+                // two squares ahead pawn move
+                isOccupied =
+                  this.getBit(this.occupancies[bothToMove], to + 8) > 0;
+                if (from >= a7 && from <= h7 && !isOccupied) {
+                  console.log(
+                    `double pawn push: ${SQ_TO_COORD[from]}${
+                      SQ_TO_COORD[to + 8]
+                    }`
+                  );
+                }
+              }
+            }
+
+            bitboard = this.popBit(bitboard, from as Square);
+          }
+        }
       }
 
       // generate knight moves
