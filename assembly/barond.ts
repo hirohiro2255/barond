@@ -906,4 +906,120 @@ export class Barond {
     }
     console.log(boardStatus + '\n');
   }
+
+  generateMoves(): void {
+    let from: i32 = 0;
+    let to: i32 = 0;
+
+    let bitboard: U64 = 0;
+    let attacks: U64 = 0;
+
+    const whitePawns = i32(Piece.WHITE_PAWNS);
+    const whiteKnights = i32(Piece.WHITE_KNIGHTS);
+    const whiteBishops = i32(Piece.WHITE_BISHOPS);
+    const whiteRooks = i32(Piece.WHITE_ROOKS);
+    const whiteQueen = i32(Piece.WHITE_QUEEN);
+    const whiteKing = i32(Piece.WHITE_KING);
+
+    const blackPawns = i32(Piece.BLACK_PAWNS);
+    const blackKnights = i32(Piece.BLACK_KNIGHTS);
+    const blackBishops = i32(Piece.BLACK_BISHOPS);
+    const blackRooks = i32(Piece.BLACK_ROOKS);
+    const blackQueen = i32(Piece.BLACK_QUEEN);
+    const blackKing = i32(Piece.BLACK_KING);
+
+    const whiteToMove = i32(Side.White);
+    const blackToMove = i32(Side.Black);
+    const bothToMove = i32(Side.Both);
+
+    const a8 = i32(Square.a8);
+    const b8 = i32(Square.b8);
+    const c8 = i32(Square.c8);
+    const d8 = i32(Square.d8);
+    const e8 = i32(Square.e8);
+    const f8 = i32(Square.f8);
+    const g8 = i32(Square.g8);
+    const h8 = i32(Square.h8);
+
+    const a7 = i32(Square.a7);
+    const b7 = i32(Square.b7);
+    const c7 = i32(Square.c7);
+    const d7 = i32(Square.d7);
+    const e7 = i32(Square.e7);
+    const f7 = i32(Square.f7);
+    const g7 = i32(Square.g7);
+    const h7 = i32(Square.h7);
+
+    const a6 = i32(Square.a6);
+    const b6 = i32(Square.b6);
+    const c6 = i32(Square.c6);
+    const d6 = i32(Square.d6);
+    const e6 = i32(Square.e6);
+    const f6 = i32(Square.f6);
+    const g6 = i32(Square.g6);
+    const h6 = i32(Square.h6);
+
+    const a5 = i32(Square.a5);
+    const b5 = i32(Square.b5);
+    const c5 = i32(Square.c5);
+    const d5 = i32(Square.d5);
+    const e5 = i32(Square.e5);
+    const f5 = i32(Square.f5);
+    const g5 = i32(Square.g5);
+    const h5 = i32(Square.h5);
+
+    const a4 = i32(Square.a4);
+    const b4 = i32(Square.b4);
+    const c4 = i32(Square.c4);
+    const d4 = i32(Square.d4);
+    const e4 = i32(Square.e4);
+    const f4 = i32(Square.f4);
+    const g4 = i32(Square.g4);
+    const h4 = i32(Square.h4);
+
+    const a3 = i32(Square.a3);
+    const b3 = i32(Square.b3);
+    const c3 = i32(Square.c3);
+    const d3 = i32(Square.d3);
+    const e3 = i32(Square.e3);
+    const f3 = i32(Square.f3);
+    const g3 = i32(Square.g3);
+    const h3 = i32(Square.h3);
+
+    const a2 = i32(Square.a2);
+    const b2 = i32(Square.b2);
+    const c2 = i32(Square.c2);
+    const d2 = i32(Square.d2);
+    const e2 = i32(Square.e2);
+    const f2 = i32(Square.f2);
+    const g2 = i32(Square.g2);
+    const h2 = i32(Square.h2);
+
+    const a1 = i32(Square.a1);
+    const b1 = i32(Square.b1);
+    const c1 = i32(Square.c1);
+    const d1 = i32(Square.d1);
+    const e1 = i32(Square.e1);
+    const f1 = i32(Square.f1);
+    const g1 = i32(Square.g1);
+    const h1 = i32(Square.h1);
+
+    const no_sq = i32(Square.no_sq);
+
+    for (let piece = whitePawns; piece <= blackKing; piece++) {
+      bitboard = this.bitboards[piece];
+
+      // generate white pawns and white king castling moves
+      if (this.side === whiteToMove) {
+      } else if (this.side === blackToMove) {
+        // generate black pawns and black king castling moves
+      }
+
+      // generate knight moves
+      // generate bishop moves
+      // generate rook moves
+      // generate queen moves
+      // generate king moves
+    }
+  }
 }

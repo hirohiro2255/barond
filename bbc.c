@@ -465,6 +465,7 @@ void parse_fen(char *fen) {
 
   // loop over board ranks
   for (int rank = 0; rank < 8; rank++) {
+    // loop over board files
     for (int file = 0; file < 8; file++) {
       // init current square
       int square = rank * 8 + file;
@@ -478,7 +479,7 @@ void parse_fen(char *fen) {
         set_bit(bitboards[piece], square);
 
         // increment pointer to FEN string
-        *fen++;
+        fen++;
       }
 
       // match empty square numbers within FEN string
@@ -506,18 +507,18 @@ void parse_fen(char *fen) {
         file += offset;
 
         // increment pointer to FEN string
-        *fen++;
+        fen++;
       }
 
       // match rank separator
       if (*fen == '/')
         // increment pointer to FEN string
-        *fen++;
+        fen++;
     }
   }
 
   // got to parsing side to move (increment pointer to FEN string)
-  *fen++;
+  fen++;
 
   // parse side to move
   (*fen == 'w') ? (side = white) : (side = black);
@@ -545,11 +546,11 @@ void parse_fen(char *fen) {
     }
 
     // increment pointer to FEN string
-    *fen++;
+    fen++;
   }
 
   // got to parsing enpassant square (increment pointer to FEN string)
-  *fen++;
+  fen++;
 
   // parse enpassant square
   if (*fen != '-') {
@@ -1078,7 +1079,7 @@ void init_sliders_attacks(int bishop) {
         int magic_index = (occupancy * rook_magic_numbers[square]) >>
                           (64 - rook_relevant_bits[square]);
 
-        // init bishop attacks
+        // init rook attacks
         rook_attacks[square][magic_index] =
             rook_attacks_on_the_fly(square, occupancy);
       }
@@ -1099,7 +1100,7 @@ static inline U64 get_bishop_attacks(int square, U64 occupancy) {
 
 // get rook attacks
 static inline U64 get_rook_attacks(int square, U64 occupancy) {
-  // get bishop attacks assuming current board occupancy
+  // get rook attacks assuming current board occupancy
   occupancy &= rook_masks[square];
   occupancy *= rook_magic_numbers[square];
   occupancy >>= 64 - rook_relevant_bits[square];
@@ -1127,7 +1128,7 @@ static inline U64 get_queen_attacks(int square, U64 occupancy) {
   // get bishop attacks
   queen_attacks = bishop_attacks[square][bishop_occupancy];
 
-  // get bishop attacks assuming current board occupancy
+  // get rook attacks assuming current board occupancy
   rook_occupancy &= rook_masks[square];
   rook_occupancy *= rook_magic_numbers[square];
   rook_occupancy >>= 64 - rook_relevant_bits[square];
@@ -1142,23 +1143,10 @@ static inline U64 get_queen_attacks(int square, U64 occupancy) {
 /**********************************\
  ==================================
 
-              Init all
+           Move generator
 
  ==================================
 \**********************************/
-
-// init all variables
-void init_all() {
-  // init leaper pieces attacks
-  init_leapers_attacks();
-
-  // init slider pieces attacks
-  init_sliders_attacks(bishop);
-  init_sliders_attacks(rook);
-
-  // init magic numbers
-  // init_magic_numbers();
-}
 
 // is square current given attacked by the current given side
 static inline int is_square_attacked(int square, int side) {
@@ -1219,6 +1207,60 @@ void print_attacked_squares(int side) {
 
   // print files
   printf("\n     a b c d e f g h\n\n");
+}
+
+// generate all moves
+static inline void generate_moves() {
+  // define source & target squares
+  int source_square, int target_square;
+
+  // define current piece's bitboard copy & it's attacks
+  U64 bitboard, attacks;
+
+  // loop over all the bitboards
+  for (int piece = P; piece <= k; piece++) {
+    // init piece bitboard copy
+    bitboard = bitboards[piece];
+
+    // generate white pawns & white king castling moves
+    if (side == white) {
+    }
+
+    // generate black pawns & black king castling moves
+    else {
+    }
+
+    // genarate knight moves
+
+    // generate bishop moves
+
+    // generate rook moves
+
+    // generate queen moves
+
+    // generate king moves
+  }
+}
+
+/**********************************\
+ ==================================
+
+              Init all
+
+ ==================================
+\**********************************/
+
+// init all variables
+void init_all() {
+  // init leaper pieces attacks
+  init_leapers_attacks();
+
+  // init slider pieces attacks
+  init_sliders_attacks(bishop);
+  init_sliders_attacks(rook);
+
+  // init magic numbers
+  // init_magic_numbers();
 }
 
 /**********************************\
