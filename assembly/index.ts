@@ -34,8 +34,7 @@ export function main(): void {
   const barond = new Barond();
   barond.parseFen(TRICKY_POSITION);
   barond.printBoard();
-  barond.printBitBoard(barond.occupancies[i32(Side.White)]);
-  barond.printBitBoard(barond.occupancies[i32(Side.Black)]);
+  barond.printAttackedSquares(Side.Black);
   // const side = KILLER_POSITION.split(' ')[1];
   // const castle = KILLER_POSITION.split(' ')[2];
   // const enpas = KILLER_POSITION.split(' ')[3];

@@ -788,4 +788,122 @@ export class Barond {
 
     return queenAttacks;
   }
+
+  isSquareAttacked(square: Square, side: Side): bool {
+    const whiteToMove = i32(Side.White);
+    const blackToMove = i32(Side.Black);
+    const bothToMove = i32(Side.Both);
+    const whitePawns = i32(Piece.WHITE_PAWNS);
+    const blackPawns = i32(Piece.BLACK_PAWNS);
+    const whiteKnights = i32(Piece.WHITE_KNIGHTS);
+    const blackKnights = i32(Piece.BLACK_KNIGHTS);
+    const whiteBishops = i32(Piece.WHITE_BISHOPS);
+    const blackBishops = i32(Piece.BLACK_BISHOPS);
+    const whiteRooks = i32(Piece.WHITE_ROOKS);
+    const blackRooks = i32(Piece.BLACK_ROOKS);
+    const whiteQueen = i32(Piece.WHITE_QUEEN);
+    const blackQueen = i32(Piece.BLACK_QUEEN);
+    const whiteKing = i32(Piece.WHITE_KING);
+    const blackKing = i32(Piece.BLACK_KING);
+
+    if (side === Side.White) {
+      // attacked by white pawns
+      if (
+        (this.blackPawnAttacks[i32(square)] & this.bitboards[whitePawns]) >
+        0
+      ) {
+        return true;
+      }
+    }
+
+    if (side == Side.Black) {
+      // attacked by black pawns
+      if (
+        (this.whitePawnAttacks[i32(square)] & this.bitboards[blackPawns]) >
+        0
+      ) {
+        return true;
+      }
+    }
+
+    // attacked by knights
+    if (
+      (this.knightAttacks[i32(square)] &
+        (side === Side.White
+          ? this.bitboards[whiteKnights]
+          : this.bitboards[blackKnights])) >
+      0
+    ) {
+      return true;
+    }
+    const bishopMoves: U64 = this.getBishopAttacks(
+      square,
+      this.occupancies[bothToMove]
+    );
+    if (
+      (bishopMoves &
+        (side === Side.White
+          ? this.bitboards[whiteBishops]
+          : this.bitboards[blackBishops])) >
+      0
+    ) {
+      return true;
+    }
+    const rookMoves: U64 = this.getRookAttacks(
+      square,
+      this.occupancies[bothToMove]
+    );
+    if (
+      (rookMoves &
+        (side === Side.White
+          ? this.bitboards[whiteRooks]
+          : this.bitboards[blackRooks])) >
+      0
+    ) {
+      return true;
+    }
+
+    const queenMoves: U64 = this.getQueenAttacks(
+      square,
+      this.occupancies[bothToMove]
+    );
+    if (
+      (queenMoves &
+        (side === Side.White
+          ? this.bitboards[whiteQueen]
+          : this.bitboards[blackQueen])) >
+      0
+    ) {
+      return true;
+    }
+
+    if (
+      (this.kingAttacks[square] &
+        (side === Side.White
+          ? this.bitboards[whiteKing]
+          : this.bitboards[blackKing])) >
+      0
+    ) {
+      return true;
+    }
+
+    return false;
+  }
+
+  printAttackedSquares(side: Side): void {
+    let boardStatus = '';
+    console.log('\n');
+    for (let rank = 0; rank < 8; rank++) {
+      for (let file = 0; file < 8; file++) {
+        const square = (rank * 8 + file) as Square;
+        if (file === 0) {
+          boardStatus += ` ${8 - rank}  `;
+        }
+
+        boardStatus += this.isSquareAttacked(square, side) ? '1 ' : '. ';
+      }
+      boardStatus += '\n';
+    }
+    console.log(boardStatus + '\n');
+  }
 }
