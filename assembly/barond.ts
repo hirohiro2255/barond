@@ -371,7 +371,7 @@ export class Barond {
         let piece = -1;
 
         if (file == 0) {
-          r += `${8 - rank} `;
+          r += `${8 - rank}   `;
         }
         const whitePawns: i32 = Piece.WHITE_PAWNS;
         const blackKing: i32 = Piece.BLACK_KING;
@@ -407,7 +407,7 @@ export class Barond {
       castleRights += '-';
     }
     console.log('\n');
-    console.log('  a b c d e f g h');
+    console.log('    a b c d e f g h');
     console.log(
       `Side to move: ${this.side === Side.White ? 'white' : 'black'}`
     );
@@ -1054,6 +1054,53 @@ export class Barond {
                 }
               }
             }
+
+            // init pawn attacks bitboard
+            attacks =
+              this.whitePawnAttacks[from] & this.occupancies[blackToMove];
+
+            // generate pawn captures
+            while (attacks > 0) {
+              // init target square
+              to = this.getLSB(attacks);
+
+              // pawn promotion
+              if (from >= a7 && from <= h7) {
+                console.log(
+                  `pawn promotion capture: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}q`
+                );
+                console.log(
+                  `pawn promotion capture: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}r`
+                );
+                console.log(
+                  `pawn promotion capture: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}n`
+                );
+                console.log(
+                  `pawn promotion capture: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}b`
+                );
+              } else {
+                // pawn attack
+                console.log(
+                  `pawn capture: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}`
+                );
+              }
+              attacks = this.popBit(attacks, to as Square);
+            }
+
+            // generate enpassant captures
+            if (this.enpassant !== Square.no_sq) {
+              // lookup pawn attacks and bitwise AND with enpassant square (bit)
+              const enpasAttacks: U64 =
+                this.whitePawnAttacks[from] & (ONE << u64(this.enpassant));
+              // make sure enpassant capture available
+              if (enpasAttacks > 0) {
+                // init enpassant capture target square
+                const toEnpas = this.getLSB(enpasAttacks);
+                console.log(
+                  `pawn enpassant capture: ${SQ_TO_COORD[from]}${SQ_TO_COORD[toEnpas]}`
+                );
+              }
+            }
             bitboard = this.popBit(bitboard, from as Square);
           }
         }
@@ -1098,6 +1145,53 @@ export class Barond {
                     }`
                   );
                 }
+              }
+            }
+
+            // init pawn attacks bitboard
+            attacks =
+              this.blackPawnAttacks[from] & this.occupancies[whiteToMove];
+
+            // generate pawn captures
+            while (attacks > 0) {
+              // init target square
+              to = this.getLSB(attacks);
+
+              // pawn promotion
+              if (from >= a2 && from <= h2) {
+                console.log(
+                  `pawn promotion capture: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}q`
+                );
+                console.log(
+                  `pawn promotion capture: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}r`
+                );
+                console.log(
+                  `pawn promotion capture: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}b`
+                );
+                console.log(
+                  `pawn promotion capture: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}n`
+                );
+              } else {
+                // pawn capture
+                console.log(
+                  `pawn capture: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}`
+                );
+              }
+              attacks = this.popBit(attacks, to as Square);
+            }
+
+            // generate enpassant captures
+            if (this.enpassant !== no_sq) {
+              // lookup pawn attacks and bitwise AND with enpassant square (bit)
+              const enpasAttacks: U64 =
+                this.blackPawnAttacks[from] & (ONE << this.enpassant);
+
+              // make sure enpassant capture available
+              if (enpasAttacks > 0) {
+                const toEnpas = this.getLSB(enpasAttacks);
+                console.log(
+                  `pawn enpassant capture: ${SQ_TO_COORD[from]}${SQ_TO_COORD[toEnpas]}`
+                );
               }
             }
 
