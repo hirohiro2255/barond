@@ -1104,6 +1104,45 @@ export class Barond {
             bitboard = this.popBit(bitboard, from as Square);
           }
         }
+
+        // castling moves
+        if (piece === whiteKing) {
+          // king side castling is available
+          if ((this.castle & Castle.WHITE_KSIDE) > 0) {
+            // make sure squares between king and king side rook are empty
+            const isF1Occupied =
+              this.getBit(this.occupancies[bothToMove], f1) > 0;
+            const isG1Occupied =
+              this.getBit(this.occupancies[bothToMove], g1) > 0;
+            // f1 and g1 are not occupied
+            if (!isF1Occupied && !isG1Occupied) {
+              // make sure king and the f1 squares are not under attacks
+              const isE1Attacked = this.isSquareAttacked(Square.e1, Side.Black);
+              const isF1Attacked = this.isSquareAttacked(Square.f1, Side.Black);
+              if (!isE1Attacked && !isF1Attacked) {
+                console.log('castling move: e1g1');
+              }
+            }
+          }
+
+          // queen side castling is available
+          if ((this.castle & Castle.WHITE_QSIDE) > 0) {
+            // make sure squares between king and queen side rook are empty
+            const isD1Occupied =
+              this.getBit(this.occupancies[bothToMove], d1) > 0;
+            const isC1Occupied =
+              this.getBit(this.occupancies[bothToMove], c1) > 0;
+            const isB1Occupied =
+              this.getBit(this.occupancies[bothToMove], b1) > 0;
+            if (!isD1Occupied && !isC1Occupied && !isB1Occupied) {
+              const isE1Attacked = this.isSquareAttacked(Square.e1, Side.Black);
+              const isD1Attacked = this.isSquareAttacked(Square.d1, Side.Black);
+              if (!isE1Attacked && !isD1Attacked) {
+                console.log('castling move: e1c1');
+              }
+            }
+          }
+        }
       } else if (this.side === blackToMove) {
         // generate black pawns and black king castling moves
         if (piece === blackPawns) {
@@ -1196,6 +1235,45 @@ export class Barond {
             }
 
             bitboard = this.popBit(bitboard, from as Square);
+          }
+        }
+
+        // castling moves
+        if (piece === blackKing) {
+          // king side castling is available
+          if ((this.castle & Castle.BLACK_KSIDE) > 0) {
+            // make sure squares between king and king side rook are empty
+            const isF8Occupied =
+              this.getBit(this.occupancies[bothToMove], f8) > 0;
+            const isG8Occupied =
+              this.getBit(this.occupancies[bothToMove], g8) > 0;
+            if (!isF8Occupied && !isG8Occupied) {
+              // make sure king and f8 square are not under attacks
+              const isE8Attacked = this.isSquareAttacked(Square.e8, Side.White);
+              const isF8Attacked = this.isSquareAttacked(Square.f8, Side.White);
+              if (!isE8Attacked && !isF8Attacked) {
+                console.log('castling move: e8g8');
+              }
+            }
+          }
+
+          // queen side castling is available
+          if ((this.castle & Castle.BLACK_QSIDE) > 0) {
+            // make sure squares between king and queen side rook are empty
+            const isB8Occupied =
+              this.getBit(this.occupancies[bothToMove], b8) > 0;
+            const isC8Occupied =
+              this.getBit(this.occupancies[bothToMove], c8) > 0;
+            const isD8Occupied =
+              this.getBit(this.occupancies[bothToMove], d8) > 0;
+            if (!isB8Occupied && !isC8Occupied && !isD8Occupied) {
+              // make sure king and d8 are not under attacks
+              const isE8Attacked = this.isSquareAttacked(Square.e8, Side.White);
+              const isD8Attacked = this.isSquareAttacked(Square.d8, Side.White);
+              if (!isE8Attacked && !isD8Attacked) {
+                console.log('castling move: e8c8');
+              }
+            }
           }
         }
       }
