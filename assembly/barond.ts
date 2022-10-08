@@ -1279,10 +1279,226 @@ export class Barond {
       }
 
       // generate knight moves
+      if (
+        this.side === Side.White
+          ? piece === whiteKnights
+          : piece === blackKnights
+      ) {
+        // loop over source squares of piece bitboard copy
+        while (bitboard > 0) {
+          // init source square
+          from = this.getLSB(bitboard);
+
+          // init piece attacks in order to get set of target squares
+          attacks =
+            this.knightAttacks[from] &
+            (this.side === Side.White
+              ? ~this.occupancies[whiteToMove]
+              : ~this.occupancies[blackToMove]);
+
+          // loop over target squares available from generated attacks
+          while (attacks > 0) {
+            // init target square
+            to = this.getLSB(attacks);
+
+            if (
+              !this.getBit(
+                this.side === Side.White
+                  ? this.occupancies[blackToMove]
+                  : this.occupancies[whiteToMove],
+                to
+              )
+            ) {
+              console.log(
+                `knight quiet move: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}`
+              );
+            } else {
+              // capture move
+              console.log(
+                `knight capture move: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}`
+              );
+            }
+            attacks = this.popBit(attacks, to as Square);
+          }
+          bitboard = this.popBit(bitboard, from as Square);
+        }
+      }
       // generate bishop moves
+      if (
+        this.side === Side.White
+          ? piece === whiteBishops
+          : piece === blackBishops
+      ) {
+        // loop over source squares of piece bitboard copy
+        while (bitboard > 0) {
+          // init source square
+          from = this.getLSB(bitboard);
+
+          // init piece attacks in order to get set of target squares
+          attacks =
+            this.getBishopAttacks(
+              from as Square,
+              this.occupancies[bothToMove]
+            ) &
+            (this.side === Side.White
+              ? ~this.occupancies[whiteToMove]
+              : ~this.occupancies[blackToMove]);
+
+          // loop over target squares available from generated attacks
+          while (attacks > 0) {
+            // init target square
+            to = this.getLSB(attacks);
+
+            // quiet move
+            if (
+              !this.getBit(
+                this.side === Side.White
+                  ? this.occupancies[blackToMove]
+                  : this.occupancies[whiteToMove],
+                to as Square
+              )
+            ) {
+              console.log(
+                `bishop quiet move: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}`
+              );
+            } else {
+              console.log(
+                `bishop capture move: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}`
+              );
+            }
+            attacks = this.popBit(attacks, to as Square);
+          }
+          bitboard = this.popBit(bitboard, from as Square);
+        }
+      }
       // generate rook moves
+      if (
+        this.side === Side.White ? piece === whiteRooks : piece === blackRooks
+      ) {
+        // loop over source squares of piece bitboard copy
+        while (bitboard > 0) {
+          // init source square
+          from = this.getLSB(bitboard);
+
+          // init piece attacks in order to get set of target squares
+          attacks =
+            this.getRookAttacks(from as Square, this.occupancies[bothToMove]) &
+            (this.side === Side.White
+              ? ~this.occupancies[whiteToMove]
+              : ~this.occupancies[blackToMove]);
+          // loop over target squares available from generated attacks
+          while (attacks > 0) {
+            // init target square
+            to = this.getLSB(attacks);
+
+            // quiet move
+            if (
+              !this.getBit(
+                this.side === Side.White
+                  ? this.occupancies[blackToMove]
+                  : this.occupancies[whiteToMove],
+                to as Square
+              )
+            ) {
+              console.log(
+                `rook quiet move: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}`
+              );
+            } else {
+              console.log(
+                `rook capture mpve: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}`
+              );
+            }
+            attacks = this.popBit(attacks, to as Square);
+          }
+          bitboard = this.popBit(bitboard, from as Square);
+        }
+      }
       // generate queen moves
+      if (
+        this.side === Side.White ? piece === whiteQueen : piece === blackQueen
+      ) {
+        // loop over source squares of piece bitboard copy
+        while (bitboard > 0) {
+          // init source square
+          from = this.getLSB(bitboard);
+
+          // init piece attacks in order to get set of target squares
+          attacks =
+            this.getQueenAttacks(from as Square, this.occupancies[bothToMove]) &
+            (this.side === Side.White
+              ? ~this.occupancies[whiteToMove]
+              : ~this.occupancies[blackToMove]);
+
+          // loop over target squares available from generated attacks
+          while (attacks > 0) {
+            // init target squares
+            to = this.getLSB(attacks);
+
+            // quiet move
+            if (
+              !this.getBit(
+                this.side === Side.White
+                  ? this.occupancies[blackToMove]
+                  : this.occupancies[whiteToMove],
+                to as Square
+              )
+            ) {
+              console.log(
+                `queen quiet move: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}`
+              );
+            } else {
+              console.log(
+                `queen capture move: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}`
+              );
+            }
+            attacks = this.popBit(attacks, to as Square);
+          }
+          bitboard = this.popBit(bitboard, from as Square);
+        }
+      }
       // generate king moves
+      if (
+        this.side === Side.White ? piece === whiteKing : piece === blackKing
+      ) {
+        // loop over source squares of piece bitboard copy
+        while (bitboard > 0) {
+          // init source square
+          from = this.getLSB(bitboard);
+
+          // init piece attacks in order to get set of target squares
+          attacks =
+            this.kingAttacks[from] &
+            (this.side === Side.White
+              ? ~this.occupancies[whiteToMove]
+              : ~this.occupancies[blackToMove]);
+
+          // loop over target squares available from generated attacks
+          while (attacks > 0) {
+            // init target square
+            to = this.getLSB(attacks);
+
+            // quiet move
+            if (
+              !this.getBit(
+                this.side === Side.White
+                  ? this.occupancies[blackToMove]
+                  : this.occupancies[whiteToMove],
+                to as Square
+              )
+            ) {
+              console.log(
+                `king quiet move: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}`
+              );
+            } else {
+              console.log(
+                `king capture move: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}`
+              );
+            }
+            attacks = this.popBit(attacks, to as Square);
+          }
+          bitboard = this.popBit(bitboard, from as Square);
+        }
+      }
     }
   }
 }
