@@ -1,4 +1,5 @@
 // The entry file of your WebAssembly module.
+import { Move } from './move';
 import {
   U64,
   Square,
@@ -14,6 +15,8 @@ import {
   ASCII_PIECES,
   Side,
   Castle,
+  SQ_TO_COORD,
+  UNICODE_PIECES,
 } from './barond';
 
 export function add(a: i32, b: i32): i32 {
@@ -37,11 +40,26 @@ export function main(): void {
   );
   barond.printBoard();
   barond.generateMoves();
-  // barond.printAttackedSquares(Side.Black);
-  // const side = KILLER_POSITION.split(' ')[1];
-  // const castle = KILLER_POSITION.split(' ')[2];
-  // const enpas = KILLER_POSITION.split(' ')[3];
-  // console.log(side);
-  // console.log(castle);
-  // console.log(enpas);
+  const move = new Move(
+    Square.d7,
+    Square.e8,
+    Piece.WHITE_PAWNS,
+    Piece.WHITE_QUEEN,
+    1,
+    0,
+    0,
+    0
+  );
+
+  const from = move.getFrom();
+  const to = move.getTo();
+  const piece = move.getPiece();
+  const promotedPiece = move.getPromoted();
+  console.log(`from: ${SQ_TO_COORD[from]}`);
+  console.log(`to: ${SQ_TO_COORD[to]}`);
+  console.log(`piece: ${UNICODE_PIECES[piece]}`);
+  console.log(`promoted piece: ${UNICODE_PIECES[promotedPiece]}`);
+  console.log(
+    `capture flag: ${move.getCapture() !== 0 ? 'capture' : 'non-capture'}`
+  );
 }

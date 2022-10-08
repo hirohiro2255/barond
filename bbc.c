@@ -1706,17 +1706,71 @@ void init_all() {
  ==================================
 \**********************************/
 
+/*
+          binary move bits                               hexidecimal constants
+
+    0000 0000 0000 0000 0011 1111    source square       0x3f
+    0000 0000 0000 1111 1100 0000    target square       0xfc0
+    0000 0000 1111 0000 0000 0000    piece               0xf000
+    0000 1111 0000 0000 0000 0000    promoted piece      0xf0000
+    0001 0000 0000 0000 0000 0000    capture flag        0x100000
+    0010 0000 0000 0000 0000 0000    double push flag    0x200000
+    0100 0000 0000 0000 0000 0000    enpassant flag      0x400000
+    1000 0000 0000 0000 0000 0000    castling flag       0x800000
+*/
+
+// encode move
+#define encode_move(source, target, piece, promoted, capture, double, \
+                    enpassant, castling)                              \
+  (source) | (target << 6) | (piece << 12) | (promoted << 16) |       \
+      (capture << 20) | (double << 21) | (enpassant << 22) | (castling << 23)
+
+// extract source square
+#define get_move_source(move) (move & 0x3f)
+
+// extract target square
+#define get_move_target(move) ((move & 0xfc0) >> 6)
+
+// extract piece
+#define get_move_piece(move) ((move & 0xf000) >> 12)
+
+// extract promoted piece
+#define get_move_promoted(move) ((move & 0xf0000) >> 16)
+
+// extract capture flag
+#define get_move_capture(move) (move & 0x100000)
+
+// extract double pawn push flag
+#define get_move_double(move) (move & 0x200000)
+
+// extract enpassant flag
+#define get_move_enpassant(move) (move & 0x400000)
+
+// extract castling flag
+#define get_move_castling(move) (move & 0x800000)
+
 int main() {
   // init all
   init_all();
 
-  // parse custom FEN string
-  parse_fen(
-      "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1 ");
-  print_board();
+  // create move
+  int move = encode_move(d7, e8, P, Q, 1, 0, 0, 0);
 
-  // generate moves
-  generate_moves();
+  // exract move items
+  int source_square = get_move_source(move);
+  int target_square = get_move_target(move);
+  int piece = get_move_piece(move);
+  int promoted_piece = get_move_promoted(move);
+
+  // print move items
+  printf("source square: %s\n", square_to_coordinates[source_square]);
+  printf("target square: %s\n", square_to_coordinates[target_square]);
+  printf("piece: %s\n", unicode_pieces[piece]);
+  printf("piece: %s\n", unicode_pieces[promoted_piece]);
+  printf("capture flag: %d\n", get_move_capture(move) ? 1 : 0);
+  printf("double pawn push flag: %d\n", get_move_double(move) ? 1 : 0);
+  printf("enpassant flag: %d\n", get_move_enpassant(move) ? 1 : 0);
+  printf("castling flag: %d\n", get_move_castling(move) ? 1 : 0);
 
   return 0;
 }
