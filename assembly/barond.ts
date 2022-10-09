@@ -1,3 +1,5 @@
+import { Move } from './move';
+
 export type U64 = u64;
 
 export const ONE: U64 = 1;
@@ -236,6 +238,17 @@ const NOT_A_FILE: U64 = 18374403900871474942;
 const NOT_H_FILE: U64 = 9187201950435737471;
 const NOT_HG_FILE: U64 = 4557430888798830399;
 const NOT_AB_FILE: U64 = 18229723555195321596;
+
+export const PROMOTED_PIECES = new Map<Piece, string>();
+PROMOTED_PIECES.set(Piece.WHITE_QUEEN, 'q');
+PROMOTED_PIECES.set(Piece.WHITE_ROOKS, 'r');
+PROMOTED_PIECES.set(Piece.WHITE_BISHOPS, 'b');
+PROMOTED_PIECES.set(Piece.WHITE_KNIGHTS, 'n');
+
+PROMOTED_PIECES.set(Piece.BLACK_QUEEN, 'q');
+PROMOTED_PIECES.set(Piece.BLACK_ROOKS, 'r');
+PROMOTED_PIECES.set(Piece.BLACK_BISHOPS, 'b');
+PROMOTED_PIECES.set(Piece.BLACK_KNIGHTS, 'n');
 
 let state: u32 = 1804289383;
 export function getRandomU32Number(): u32 {
@@ -907,7 +920,8 @@ export class Barond {
     console.log(boardStatus + '\n');
   }
 
-  generateMoves(): void {
+  generateMoves(): Move[] {
+    const moveList = new Array<Move>();
     let from: i32 = 0;
     let to: i32 = 0;
 
@@ -1025,32 +1039,26 @@ export class Barond {
             if (!(to < a8) && !isOccupied) {
               // pawn promotion
               if (from >= a7 && from <= h7) {
-                console.log(
-                  `pawn promotion: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}q`
+                moveList.push(
+                  new Move(from, to, piece, whiteQueen, 0, 0, 0, 0)
                 );
-                console.log(
-                  `pawn promotion: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}r`
+                moveList.push(
+                  new Move(from, to, piece, whiteRooks, 0, 0, 0, 0)
                 );
-                console.log(
-                  `pawn promotion: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}b`
+                moveList.push(
+                  new Move(from, to, piece, whiteKnights, 0, 0, 0, 0)
                 );
-                console.log(
-                  `pawn promotion: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}n`
+                moveList.push(
+                  new Move(from, to, piece, whiteBishops, 0, 0, 0, 0)
                 );
               } else {
                 // one square ahead pawn move
-                console.log(
-                  `pawn push: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}`
-                );
+                moveList.push(new Move(from, to, piece, 0, 0, 0, 0, 0));
                 // two squares ahead pawn move
                 isOccupied =
                   this.getBit(this.occupancies[bothToMove], to - 8) > 0;
                 if (from >= a2 && from <= h2 && !isOccupied) {
-                  console.log(
-                    `double pawn push: ${SQ_TO_COORD[from]}${
-                      SQ_TO_COORD[to - 8]
-                    }`
-                  );
+                  moveList.push(new Move(from, to - 8, piece, 0, 0, 1, 0, 0));
                 }
               }
             }
@@ -1066,23 +1074,21 @@ export class Barond {
 
               // pawn promotion
               if (from >= a7 && from <= h7) {
-                console.log(
-                  `pawn promotion capture: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}q`
+                moveList.push(
+                  new Move(from, to, piece, whiteQueen, 1, 0, 0, 0)
                 );
-                console.log(
-                  `pawn promotion capture: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}r`
+                moveList.push(
+                  new Move(from, to, piece, whiteRooks, 1, 0, 0, 0)
                 );
-                console.log(
-                  `pawn promotion capture: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}n`
+                moveList.push(
+                  new Move(from, to, piece, whiteKnights, 1, 0, 0, 0)
                 );
-                console.log(
-                  `pawn promotion capture: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}b`
+                moveList.push(
+                  new Move(from, to, piece, whiteBishops, 1, 0, 0, 0)
                 );
               } else {
                 // pawn attack
-                console.log(
-                  `pawn capture: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}`
-                );
+                moveList.push(new Move(from, to, piece, 0, 1, 0, 0, 0));
               }
               attacks = this.popBit(attacks, to as Square);
             }
@@ -1096,9 +1102,7 @@ export class Barond {
               if (enpasAttacks > 0) {
                 // init enpassant capture target square
                 const toEnpas = this.getLSB(enpasAttacks);
-                console.log(
-                  `pawn enpassant capture: ${SQ_TO_COORD[from]}${SQ_TO_COORD[toEnpas]}`
-                );
+                moveList.push(new Move(from, toEnpas, piece, 0, 1, 0, 1, 0));
               }
             }
             bitboard = this.popBit(bitboard, from as Square);
@@ -1121,6 +1125,7 @@ export class Barond {
               const isF1Attacked = this.isSquareAttacked(Square.f1, Side.Black);
               if (!isE1Attacked && !isF1Attacked) {
                 console.log('castling move: e1g1');
+                moveList.push(new Move(e1, g1, piece, 0, 0, 0, 0, 1));
               }
             }
           }
@@ -1138,7 +1143,7 @@ export class Barond {
               const isE1Attacked = this.isSquareAttacked(Square.e1, Side.Black);
               const isD1Attacked = this.isSquareAttacked(Square.d1, Side.Black);
               if (!isE1Attacked && !isD1Attacked) {
-                console.log('castling move: e1c1');
+                moveList.push(new Move(e1, c1, piece, 0, 0, 0, 0, 1));
               }
             }
           }
@@ -1157,32 +1162,26 @@ export class Barond {
             if (!(to > h1) && !isOccupied) {
               // pawn promotion
               if (from >= a2 && from <= h2) {
-                console.log(
-                  `pawn promotion: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}q`
+                moveList.push(
+                  new Move(from, to, piece, blackQueen, 0, 0, 0, 0)
                 );
-                console.log(
-                  `pawn promotion: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}r`
+                moveList.push(
+                  new Move(from, to, piece, blackRooks, 0, 0, 0, 0)
                 );
-                console.log(
-                  `pawn promotion: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}b`
+                moveList.push(
+                  new Move(from, to, piece, blackBishops, 0, 0, 0, 0)
                 );
-                console.log(
-                  `pawn promotion: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}n`
+                moveList.push(
+                  new Move(from, to, piece, blackKnights, 0, 0, 0, 0)
                 );
               } else {
                 // one square ahead pawn move
-                console.log(
-                  `pawn push: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}`
-                );
+                moveList.push(new Move(from, to, piece, 0, 0, 0, 0, 0));
                 // two squares ahead pawn move
                 isOccupied =
                   this.getBit(this.occupancies[bothToMove], to + 8) > 0;
                 if (from >= a7 && from <= h7 && !isOccupied) {
-                  console.log(
-                    `double pawn push: ${SQ_TO_COORD[from]}${
-                      SQ_TO_COORD[to + 8]
-                    }`
-                  );
+                  moveList.push(new Move(from, to + 8, piece, 0, 0, 1, 0, 0));
                 }
               }
             }
@@ -1198,23 +1197,21 @@ export class Barond {
 
               // pawn promotion
               if (from >= a2 && from <= h2) {
-                console.log(
-                  `pawn promotion capture: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}q`
+                moveList.push(
+                  new Move(from, to, piece, blackQueen, 1, 0, 0, 0)
                 );
-                console.log(
-                  `pawn promotion capture: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}r`
+                moveList.push(
+                  new Move(from, to, piece, blackRooks, 1, 0, 0, 0)
                 );
-                console.log(
-                  `pawn promotion capture: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}b`
+                moveList.push(
+                  new Move(from, to, piece, blackBishops, 1, 0, 0, 0)
                 );
-                console.log(
-                  `pawn promotion capture: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}n`
+                moveList.push(
+                  new Move(from, to, piece, blackKnights, 1, 0, 0, 0)
                 );
               } else {
                 // pawn capture
-                console.log(
-                  `pawn capture: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}`
-                );
+                moveList.push(new Move(from, to, piece, 0, 1, 0, 0, 0));
               }
               attacks = this.popBit(attacks, to as Square);
             }
@@ -1228,9 +1225,7 @@ export class Barond {
               // make sure enpassant capture available
               if (enpasAttacks > 0) {
                 const toEnpas = this.getLSB(enpasAttacks);
-                console.log(
-                  `pawn enpassant capture: ${SQ_TO_COORD[from]}${SQ_TO_COORD[toEnpas]}`
-                );
+                moveList.push(new Move(from, toEnpas, piece, 0, 1, 0, 1, 0));
               }
             }
 
@@ -1252,7 +1247,7 @@ export class Barond {
               const isE8Attacked = this.isSquareAttacked(Square.e8, Side.White);
               const isF8Attacked = this.isSquareAttacked(Square.f8, Side.White);
               if (!isE8Attacked && !isF8Attacked) {
-                console.log('castling move: e8g8');
+                moveList.push(new Move(e8, g8, piece, 0, 0, 0, 0, 1));
               }
             }
           }
@@ -1271,7 +1266,7 @@ export class Barond {
               const isE8Attacked = this.isSquareAttacked(Square.e8, Side.White);
               const isD8Attacked = this.isSquareAttacked(Square.d8, Side.White);
               if (!isE8Attacked && !isD8Attacked) {
-                console.log('castling move: e8c8');
+                moveList.push(new Move(e8, c8, piece, 0, 0, 0, 0, 1));
               }
             }
           }
@@ -1309,14 +1304,10 @@ export class Barond {
                 to
               )
             ) {
-              console.log(
-                `knight quiet move: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}`
-              );
+              moveList.push(new Move(from, to, piece, 0, 0, 0, 0, 0));
             } else {
               // capture move
-              console.log(
-                `knight capture move: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}`
-              );
+              moveList.push(new Move(from, to, piece, 0, 1, 0, 0, 0));
             }
             attacks = this.popBit(attacks, to as Square);
           }
@@ -1358,13 +1349,9 @@ export class Barond {
                 to as Square
               )
             ) {
-              console.log(
-                `bishop quiet move: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}`
-              );
+              moveList.push(new Move(from, to, piece, 0, 0, 0, 0, 0));
             } else {
-              console.log(
-                `bishop capture move: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}`
-              );
+              moveList.push(new Move(from, to, piece, 0, 1, 0, 0, 0));
             }
             attacks = this.popBit(attacks, to as Square);
           }
@@ -1400,13 +1387,9 @@ export class Barond {
                 to as Square
               )
             ) {
-              console.log(
-                `rook quiet move: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}`
-              );
+              moveList.push(new Move(from, to, piece, 0, 0, 0, 0, 0));
             } else {
-              console.log(
-                `rook capture mpve: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}`
-              );
+              moveList.push(new Move(from, to, piece, 0, 1, 0, 0, 0));
             }
             attacks = this.popBit(attacks, to as Square);
           }
@@ -1443,13 +1426,9 @@ export class Barond {
                 to as Square
               )
             ) {
-              console.log(
-                `queen quiet move: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}`
-              );
+              moveList.push(new Move(from, to, piece, 0, 0, 0, 0, 0));
             } else {
-              console.log(
-                `queen capture move: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}`
-              );
+              moveList.push(new Move(from, to, piece, 0, 1, 0, 0, 0));
             }
             attacks = this.popBit(attacks, to as Square);
           }
@@ -1486,13 +1465,9 @@ export class Barond {
                 to as Square
               )
             ) {
-              console.log(
-                `king quiet move: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}`
-              );
+              moveList.push(new Move(from, to, piece, 0, 0, 0, 0, 0));
             } else {
-              console.log(
-                `king capture move: ${SQ_TO_COORD[from]}${SQ_TO_COORD[to]}`
-              );
+              moveList.push(new Move(from, to, piece, 0, 1, 0, 0, 0));
             }
             attacks = this.popBit(attacks, to as Square);
           }
@@ -1500,5 +1475,6 @@ export class Barond {
         }
       }
     }
+    return moveList;
   }
 }

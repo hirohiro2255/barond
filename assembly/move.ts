@@ -1,3 +1,5 @@
+import { ASCII_PIECES, SQ_TO_COORD, UNICODE_PIECES } from './barond';
+
 export class Move {
   private _move: i32;
   constructor(
@@ -43,5 +45,12 @@ export class Move {
   }
   getCastling(): i32 {
     return this._move & 0x800000;
+  }
+  printMove(): void {
+    console.log(
+      `${UNICODE_PIECES[this.getPiece()]}: ${SQ_TO_COORD[this.getFrom()]}${
+        SQ_TO_COORD[this.getTo()]
+      }`
+    );
   }
 }

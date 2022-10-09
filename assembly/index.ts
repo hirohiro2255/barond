@@ -23,6 +23,10 @@ export function add(a: i32, b: i32): i32 {
   return a + b;
 }
 
+export function addMove(arr: string[]): void {
+  arr.push('hi');
+}
+
 export function main(): void {
   const EMPTY_BOARD = '8/8/8/8/8/8/8/8 w - - ';
   const START_POSITION =
@@ -39,27 +43,9 @@ export function main(): void {
     'r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1 '
   );
   barond.printBoard();
-  barond.generateMoves();
-  const move = new Move(
-    Square.d7,
-    Square.e8,
-    Piece.WHITE_PAWNS,
-    Piece.WHITE_QUEEN,
-    1,
-    0,
-    0,
-    0
-  );
-
-  const from = move.getFrom();
-  const to = move.getTo();
-  const piece = move.getPiece();
-  const promotedPiece = move.getPromoted();
-  console.log(`from: ${SQ_TO_COORD[from]}`);
-  console.log(`to: ${SQ_TO_COORD[to]}`);
-  console.log(`piece: ${UNICODE_PIECES[piece]}`);
-  console.log(`promoted piece: ${UNICODE_PIECES[promotedPiece]}`);
-  console.log(
-    `capture flag: ${move.getCapture() !== 0 ? 'capture' : 'non-capture'}`
-  );
+  const moves = barond.generateMoves();
+  console.log(moves.length.toString());
+  for (let i = 0; i < moves.length; i++) {
+    moves[i].printMove();
+  }
 }
