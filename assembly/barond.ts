@@ -1517,6 +1517,58 @@ export class Barond {
     });
     const from = move.getFrom();
     const to = move.getTo();
-    const moveType = move.getPiece();
+    const piece = move.getPiece();
+    const promoted = move.getPromoted();
+    const captured = move.getCapture();
+    const doublePawn = move.getDoublePawnPush();
+    const enpas = move.getEnpas();
+    const castling = move.getCastling();
+
+    this.bitboards[piece] = this.popBit(this.bitboards[piece], from);
+    this.bitboards[piece] = this.setBit(this.bitboards[piece], to);
+
+    if (captured > 0) {
+      let startPiece: i32;
+      let endPiece: i32;
+
+      if (this.side === Side.White) {
+        startPiece = Piece.WHITE_PAWNS;
+        endPiece = Piece.WHITE_KING;
+      } else {
+        startPiece = Piece.BLACK_PAWNS;
+        endPiece = Piece.BLACK_KING;
+      }
+
+      for (let bbPiece = startPiece; bbPiece <= endPiece; bbPiece++) {
+        if (this.getBit(this.bitboards[bbPiece], to as Square) > 0) {
+          this.bitboards[bbPiece] = this.popBit(
+            this.bitboards[bbPiece],
+            to as Square
+          );
+          break;
+        }
+      }
+    }
+    // make sure the move has not exposed the king into a check
+    let kingSquare: Square =
+      this.side === Side.White
+        ? this.getLSB(this.bitboards[Piece.BLACK_KING as i32])
+        : this.getLSB(this.bitboards[Piece.WHITE_KING as i32]);
+    if (this.isSquareAttacked(kingSquare, this.side)) {
+      // illigal move
+      this.takeBack();
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  takeBack(): void {
+    const prev = this.moveStack.pop();
+    this.bitboards = prev.bitboards;
+    this.occupancies = prev.occupancies;
+    this.side = prev.side;
+    this.enpassant = prev.enpassant;
+    this.castle = prev.castle;
   }
 }
