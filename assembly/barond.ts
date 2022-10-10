@@ -1,5 +1,13 @@
 import { Move } from './move';
 
+interface BoardCopy {
+  bitboards: U64[];
+  occupancies: U64[];
+  side: Side;
+  enpassant: Square;
+  castle: i32;
+}
+
 export type U64 = u64;
 
 export const ONE: U64 = 1;
@@ -287,6 +295,8 @@ export class Barond {
   rookMasks: U64[] = new Array<U64>(64);
   bishopAttacks: U64[][] = [];
   rookAttacks: U64[][] = [];
+  private totalNodes: i32 = 0;
+  private moveStack = new Array<BoardCopy>();
   constructor() {
     this.initLeapersAttacks();
     this.initSlidersAttacks(SlidingPiece.Rook);
@@ -1476,5 +1486,37 @@ export class Barond {
       }
     }
     return moveList;
+  }
+
+  perftDriver(depth: i32): i32 {
+    let nodes = 0;
+    if (depth === 0) {
+      this.totalNodes++;
+      return 1;
+    }
+
+    const moves = this.generateMoves();
+    for (let i = 0; i < moves.length; i++) {
+      const move = moves[i];
+
+      // Skip the move if it puts the king into check
+      if (this.makeMove(move)) {
+        nodes += this.perftDriver(depth - 1);
+      }
+      this.unmakeMove(move);
+    }
+    return nodes;
+  }
+  makeMove(move: Move): bool {
+    this.moveStack.push({
+      bitboards: this.bitboards.slice(0),
+      occupancies: this.occupancies.slice(0),
+      side: this.side,
+      enpassant: this.enpassant,
+      castle: this.castle,
+    });
+    const from = move.getFrom();
+    const to = move.getTo();
+    const moveType = move.getPiece();
   }
 }
