@@ -4,5 +4,5 @@ export function main(): void {
   const board = new Board();
   board.setToStartPos();
 
-  console.log(board.getStringRep());
+  console.log(board.getPawnAttacks().toString());
 }

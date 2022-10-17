@@ -25,6 +25,7 @@ export class Board {
   private BLACK_PIECES: U64 = 0;
 
   private OCCUPIED: U64 = 0;
+  private NOT_OCCUPIED: U64 = 0;
 
   constructor() {}
 
@@ -76,6 +77,7 @@ export class Board {
     this.WHITE_PIECES = this.getWhitePieces();
     this.BLACK_PIECES = this.getBlackPieces();
     this.OCCUPIED = this.getOccupied();
+    this.NOT_OCCUPIED = ~this.OCCUPIED;
   }
 
   public getStringRep(): string {
@@ -109,6 +111,47 @@ export class Board {
     }
 
     return stringRep;
+  }
+
+  public getPawnMoves(): U64 {
+    const pawns = this._whiteToMove ? this.WHITE_PAWNS : this.BLACK_PAWNS;
+    let potentialMoves = pawns << 8;
+    const base: U64 = 1;
+
+    for (let i = 0; i < 64; i++) {
+      const square: U64 = base << i;
+
+      // If this is a square in front of a pawn and is occupied
+      if (potentialMoves & square && square & this.OCCUPIED) {
+        // Unset bit
+        potentialMoves ^= square;
+      }
+    }
+
+    return potentialMoves;
+  }
+
+  public getPawnAttacks(): U64 {
+    const pawns = this._whiteToMove ? this.WHITE_PAWNS : this.BLACK_PAWNS;
+    const opponentPieces = this._whiteToMove
+      ? this.BLACK_PIECES
+      : this.WHITE_PIECES;
+    const notOpponentPieces = ~opponentPieces;
+
+    let potentialAttacks =
+      ((pawns << 9) ^ Board.FILE_8) & ((pawns << 8) ^ Board.FILE_1);
+
+    const base: U64 = 1;
+    for (let i = 0; i < 64; i++) {
+      const square: U64 = base << i;
+
+      // If this is a square that a pawn can attack and is not occupied by an opponent
+      if (potentialAttacks & square && square & notOpponentPieces) {
+        // Unset bit
+        potentialAttacks ^= square;
+      }
+    }
+    return potentialAttacks;
   }
 
   static RANK_1: U64 = 255;

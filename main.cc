@@ -7,5 +7,5 @@ int main() {
 
   board.setToStartPos();
 
-  std::cout << board.getStringRep();
+  std::cout << board.getPawnAttacks();
 }
