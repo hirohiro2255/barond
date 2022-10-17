@@ -1,5 +1,8 @@
-all: bbc.c
-	clang bbc.c -o bbc && ./bbc
+all:
+	clang++ main.cc board.cc -o chess
 
-build: assembly/*.ts
-	npm run asbuild
+run:
+	./chess
+
+clean:
+	rm chess
