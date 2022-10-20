@@ -69,3 +69,10 @@ SQUARES.set('OFFBOARD', 100);
 export const BOOL = new Map<string, i32>();
 BOOL.set('FALSE', 0);
 BOOL.set('TRUE', 1);
+
+export const FilesBrd = new Array<i32>(BRD_SQ_NUM);
+export const RanksBrd = new Array<i32>(BRD_SQ_NUM);
+
+export function FR2SQ(f: i32, r: i32): i32 {
+  return 21 + f + r * 10;
+}
