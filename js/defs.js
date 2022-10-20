@@ -71,3 +71,5 @@ var RanksBrd = new Array(BRD_SQ_NUM);
 function FR2SQ(f, r) {
   return 21 + f + r * 10;
 }
+
+var CASTLEBIT = { WKCA: 1, WQCA: 2, BKCA: 4, BQCA: 8 };

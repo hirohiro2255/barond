@@ -76,3 +76,9 @@ export const RanksBrd = new Array<i32>(BRD_SQ_NUM);
 export function FR2SQ(f: i32, r: i32): i32 {
   return 21 + f + r * 10;
 }
+
+export const CASTLEBIT = new Map<string, i32>();
+CASTLEBIT.set('WKCA', 1);
+CASTLEBIT.set('WQCA', 2);
+CASTLEBIT.set('BKCA', 4);
+CASTLEBIT.set('BQCA', 8);
