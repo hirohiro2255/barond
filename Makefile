@@ -1,5 +1,5 @@
 all:
-	clang++ main.cc board.cc -o chess
+	clang++  -g -std=c++11 main.cc board.cc cmove.cc -o chess
 
 run:
 	./chess

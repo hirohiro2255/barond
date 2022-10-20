@@ -1,8 +1,3 @@
-import { Board } from './board';
-
-export function main(): void {
-  const board = new Board();
-  board.setToStartPos();
-
-  console.log(board.getPawnAttacks().toString());
+export function init(): void {
+  console.log('init() called');
 }

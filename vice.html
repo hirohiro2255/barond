@@ -6,12 +6,17 @@
       integrity="sha512-CX7sDOp7UTAq+i1FYIlf9Uo27x4os+kGeoT7rgwvY+4dmjqV0IuE/Bl5hVsjnQPQiTOhAX1O2r2j5bjsFBvv/A=="
       crossorigin="anonymous"
     ></script>
-    <script type="module">
-      import { init } from './build/release.js';
-      $(() => {
-        init();
-      });
-    </script>
   </head>
-  <body></body>
+  <body>
+    <header>
+      <h3>JS Chess</h3>
+    </header>
+    <div id="FenInDiv">
+      Fen: <br />
+      <input type="text" id="fenIn" />
+      <button id="SetFen">Set Position</button>
+    </div>
+    <script src="defs.js"></script>
+    <script src="main.js"></script>
+  </body>
 </html>
