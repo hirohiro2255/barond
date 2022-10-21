@@ -1,15 +1,21 @@
 import { BRD_SQ_NUM, COLOURS } from './defs';
 
+export function PCEINDEX(pce: i32, pceNum: i32): i32 {
+  return pce * 10 + pceNum;
+}
+
 export class Board {
   public pieces = new Array<i32>(BRD_SQ_NUM);
   public side = COLOURS.get('WHITE');
   public fiftyMove = 0;
   public hisPly = 0;
   public ply = 0;
+  public enPas = 0;
   public castlePerm = 0;
   public material = new Array<i32>(2); // WHITE,BLACK material of pieces
   public pceNum = new Array<i32>(13); // indexed by Pce
   public pList = new Array<i32>(14 * 10);
+  public posKey = 0;
 }
 
 /*

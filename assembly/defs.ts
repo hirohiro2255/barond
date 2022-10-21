@@ -238,3 +238,11 @@ export const PieceSlides = [
   true,
   false,
 ];
+
+export function RAND_32(): u32 {
+  const n1 = u32(Math.floor(Math.random() * 255 + 1)) << 23;
+  const n2 = u32(Math.floor(Math.random() * 255 + 1)) << 16;
+  const n3 = u32(Math.floor(Math.random() * 255 + 1)) << 8;
+  const n4 = u32(Math.floor(Math.random() * 255 + 1));
+  return n1 | n2 | n3 | n4;
+}
