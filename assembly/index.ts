@@ -253,6 +253,17 @@ export const PieceKeys = new Array<u32>(14 * 120);
 export let SideKey: i32;
 export const CastleKeys = new Array<u32>(16);
 
+export const Sq120ToSq64 = new Array<u32>(BRD_SQ_NUM);
+export const Sq64ToSq120 = new Array<u32>(64);
+
+export function SQ64(sq120: u32): u32 {
+  return Sq120ToSq64[sq120];
+}
+
+export function SQ120(sq64: u32): u32 {
+  return Sq64ToSq120[sq64];
+}
+
 export function RAND_32(): u32 {
   const n1 = u32(Math.floor(Math.random() * 255 + 1)) << 23;
   const n2 = u32(Math.floor(Math.random() * 255 + 1)) << 16;
@@ -356,6 +367,7 @@ export function init(): void {
   console.log('init() called');
   InitFilesRanksBrd();
   InitHashKeys();
+  InitSq120ToSq64();
 }
 
 export function InitFilesRanksBrd(): void {
@@ -377,18 +389,6 @@ export function InitFilesRanksBrd(): void {
       RanksBrd[sq] = rank;
     }
   }
-
-  console.log(`FilesBrd[0]: ${FilesBrd[0]}, RanksBrd[0]: ${RanksBrd[0]}`);
-  console.log(
-    `FilesBrd[SQUARES.A1]: ${
-      FilesBrd[SQUARES.get('A1')]
-    }, RanksBrd[SQUARES.A1]: ${RanksBrd[SQUARES.get('A1')]}`
-  );
-  console.log(
-    `FilesBrd[SQUARES.E8]: ${
-      FilesBrd[SQUARES.get('E8')]
-    }, RanksBrd[SQUARES.E8]: ${RanksBrd[SQUARES.get('E8')]}`
-  );
 }
 
 export function InitHashKeys(): void {
@@ -400,5 +400,25 @@ export function InitHashKeys(): void {
 
   for (let i = 0; i < 16; i++) {
     CastleKeys[i] = RAND_32();
+  }
+}
+
+function InitSq120ToSq64(): void {
+  for (let i = 0; i < BRD_SQ_NUM; i++) {
+    Sq120ToSq64[i] = 65;
+  }
+  for (let i = 0; i < 64; i++) {
+    Sq64ToSq120[i] = 120;
+  }
+
+  let sq = SQUARES.get('A1');
+  let sq64 = 0;
+  for (let rank = RANKS.get('RANK_1'); rank <= RANKS.get('RANK_8'); rank++) {
+    for (let file = FILES.get('FILE_A'); file <= FILES.get('FILE_H'); file++) {
+      const sq = FR2SQ(file, rank);
+      Sq64ToSq120[sq64] = sq;
+      Sq120ToSq64[sq] = sq64;
+      sq64++;
+    }
   }
 }
