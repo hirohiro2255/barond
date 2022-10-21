@@ -42,6 +42,8 @@ var RANKS = {
 
 var COLOURS = { WHITE: 0, BLACK: 1, BOTH: 2 };
 
+var CASTLEBIT = { WKCA: 1, WQCA: 2, BKCA: 4, BQCA: 8 };
+
 var SQUARES = {
   A1: 21,
   B1: 22,
@@ -71,8 +73,6 @@ var RanksBrd = new Array(BRD_SQ_NUM);
 function FR2SQ(f, r) {
   return 21 + f + r * 10;
 }
-
-var CASTLEBIT = { WKCA: 1, WQCA: 2, BKCA: 4, BQCA: 8 };
 
 var PieceBig = [
   BOOL.FALSE,
@@ -228,6 +228,10 @@ var PieceSlides = [
   BOOL.TRUE,
   BOOL.FALSE,
 ];
+
+var PieceKeys = new Array(14 * 120);
+var SideKey;
+var CastleKeys = new Array(16);
 
 function RAND_32() {
   return (
