@@ -394,6 +394,84 @@ export function ResetBoard(): void {
 
 export function ParseFen(fen: string): void {
   ResetBoard();
+
+  let rank = RANKS.get('RANK_8');
+  let file = FILES.get('FILE_A');
+  let piece = 0;
+  let count = 0;
+  let i = 0;
+  let sq120 = 0;
+  let fenCnt = 0;
+
+  while (rank >= RANKS.get('RANK_1') && fenCnt < fen.length) {
+    count = 1;
+
+    switch (fen.at(fenCnt)) {
+      case 'p':
+        piece = PIECES.get('bP');
+        break;
+      case 'r':
+        piece = PIECES.get('bR');
+        break;
+      case 'n':
+        piece = PIECES.get('bN');
+        break;
+      case 'b':
+        piece = PIECES.get('bB');
+        break;
+      case 'k':
+        piece = PIECES.get('bK');
+        break;
+      case 'q':
+        piece = PIECES.get('bQ');
+        break;
+      case 'P':
+        piece = PIECES.get('wP');
+        break;
+      case 'R':
+        piece = PIECES.get('wR');
+        break;
+      case 'N':
+        piece = PIECES.get('wN');
+        break;
+      case 'B':
+        piece = PIECES.get('wB');
+        break;
+      case 'K':
+        piece = PIECES.get('wK');
+        break;
+      case 'Q':
+        piece = PIECES.get('wQ');
+        break;
+      case '1':
+      case '2':
+      case '3':
+      case '4':
+      case '5':
+      case '6':
+      case '7':
+      case '8':
+        piece = PIECES.get('EMPTY');
+        count = parseInt(fen.at(fenCnt));
+        break;
+      case '/':
+      case ' ':
+        rank--;
+        file = FILES.get('FILE_A');
+        fenCnt++;
+        continue;
+      default:
+        console.log('FEN error');
+        return;
+    }
+
+    for (let i = 0; i < count; i++) {
+      sq120 = FR2SQ(file, rank);
+      pieces[sq120] = piece;
+      file++;
+    }
+    fenCnt++;
+  }
 }
 
 /**
