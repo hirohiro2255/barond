@@ -8,6 +8,10 @@
  *
  */
 
+const MAXGAMEMOVES: i32 = 2048;
+const MAXPOSITIONMOVES: i32 = 256;
+const MAXDEPTH: i32 = 64;
+
 export const PIECES = new Map<string, i32>();
 
 PIECES.set('EMPTY', 0);
@@ -298,6 +302,10 @@ let pceNum: Array<u32> = new Array<u32>(13); // indexed by Pce
 let pList: Array<u32> = new Array<u32>(14 * 10);
 let posKey: u32 = 0;
 
+export const moveList = new Array<u32>(MAXDEPTH * MAXPOSITIONMOVES);
+export const moveScores = new Array<u32>(MAXDEPTH * MAXPOSITIONMOVES);
+export const moveListStart = new Array<u32>(MAXDEPTH);
+
 /*
 
 loop (pieces[])
@@ -351,6 +359,41 @@ export function GeneratePosKey(): u32 {
   finalKey ^= CastleKeys[castlePerm];
 
   return finalKey;
+}
+
+export function ResetBoard(): void {
+  for (let i = 0; i < BRD_SQ_NUM; i++) {
+    pieces[i] = SQUARES.get('OFFBOARD');
+  }
+
+  for (let i = 0; i < 64; i++) {
+    pieces[SQ120(i)] = PIECES.get('EMPTY');
+  }
+
+  for (let i = 0; i < 14 * 120; i++) {
+    pList[i] = PIECES.get('EMPTY');
+  }
+
+  for (let i = 0; i < 2; i++) {
+    material[i] = 0;
+  }
+
+  for (let i = 0; i < 13; i++) {
+    pceNum[i] = 0;
+  }
+
+  side = COLOURS.get('BOTH');
+  enPas = SQUARES.get('NO_SQ');
+  fiftyMove = 0;
+  ply = 0;
+  hisPly = 0;
+  castlePerm = 0;
+  posKey = 0;
+  moveListStart[ply] = 0;
+}
+
+export function ParseFen(fen: string): void {
+  ResetBoard();
 }
 
 /**
