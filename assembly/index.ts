@@ -471,7 +471,43 @@ export function ParseFen(fen: string): void {
       file++;
     }
     fenCnt++;
+  } // while loop ends
+
+  side = fen.at(fenCnt) === 'w' ? COLOURS.get('WHITE') : COLOURS.get('BLACK');
+  fenCnt += 2;
+
+  for (let i = 0; i < 4; i++) {
+    if (fen.at(fenCnt) === ' ') {
+      break;
+    }
+    switch (fen.at(fenCnt)) {
+      case 'K':
+        castlePerm |= CASTLEBIT.get('WKCA');
+        break;
+      case 'Q':
+        castlePerm |= CASTLEBIT.get('WQCA');
+        break;
+      case 'k':
+        castlePerm |= CASTLEBIT.get('BKCA');
+        break;
+      case 'q':
+        castlePerm |= CASTLEBIT.get('BQCA');
+        break;
+      default:
+        break;
+    }
+    fenCnt++;
   }
+  fenCnt++;
+
+  if (fen.at(fenCnt) !== '-') {
+    file = fen.at(fenCnt).charCodeAt(0) - 'a'.charCodeAt(0);
+    rank = fen.at(fenCnt + 1).charCodeAt(0) - '1'.charCodeAt(0);
+    console.log(`fen[fenCnt]: ${fen.at(fenCnt)}, File: ${file}, Rank: ${rank}`);
+    enPas = FR2SQ(file, rank);
+  }
+
+  posKey = GeneratePosKey();
 }
 
 /**
