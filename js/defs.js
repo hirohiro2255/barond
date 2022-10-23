@@ -240,6 +240,11 @@ var PieceSlides = [
   BOOL.FALSE,
 ];
 
+var KnDir = [-8, -19, -21, -12, 8, 19, 21, 12];
+var RkDir = [-1, -10, 1, 10];
+var BiDir = [-9, -11, 11, 9];
+var KiDir = [-1, -10, 1, 10, -9, -11, 11, 9];
+
 var PieceKeys = new Array(14 * 120);
 var SideKey;
 var CastleKeys = new Array(16);

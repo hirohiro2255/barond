@@ -253,6 +253,11 @@ export const PieceSlides = [
   false,
 ];
 
+const KnDir = [-8, -19, -21, -12, 8, 19, 21, 12];
+const RkDir = [-1, -10, 1, 10];
+const BiDir = [-9, -11, 11, 9];
+const KiDir = [-1, -10, 1, 10, -9, -11, 11, 9];
+
 export const PieceKeys = new Array<u32>(14 * 120);
 export let SideKey: i32;
 export const CastleKeys = new Array<u32>(16);
@@ -626,6 +631,61 @@ export function SqAttacked(sq: u32, side: u32): bool {
       return true;
     }
   }
+
+  for (let i = 0; i < 8; i++) {
+    let pce = GameBoard_pieces[sq + KnDir[i]];
+    if (
+      pce !== SQUARES.get('OFFBOARD') &&
+      PieceCol[pce] === side &&
+      PieceKnight[pce]
+    ) {
+      return true;
+    }
+  }
+
+  for (let i = 0; i < 4; i++) {
+    const dir = RkDir[i];
+    let t_sq = sq + dir;
+    let pce = GameBoard_pieces[t_sq];
+    while (pce !== SQUARES.get('OFFBOARD')) {
+      if (pce !== PIECES.get('EMPTY')) {
+        if (PieceRookQueen[pce] && PieceCol[pce] === side) {
+          return true;
+        }
+        break;
+      }
+      t_sq += dir;
+      pce = GameBoard_pieces[t_sq];
+    }
+  }
+
+  for (let i = 0; i < 4; i++) {
+    let dir = BiDir[i];
+    let t_sq = sq + dir;
+    let pce = GameBoard_pieces[t_sq];
+    while (pce !== SQUARES.get('OFFBOARD')) {
+      if (pce !== PIECES.get('EMPTY')) {
+        if (PieceBishopQueen[pce] && PieceCol[pce] === side) {
+          return true;
+        }
+        break;
+      }
+      t_sq += dir;
+      pce = GameBoard_pieces[t_sq];
+    }
+  }
+
+  for (let i = 0; i < 8; i++) {
+    const pce = GameBoard_pieces[sq + KiDir[i]];
+    if (
+      pce !== SQUARES.get('OFFBOARD') &&
+      PieceCol[pce] === side &&
+      PieceKing[pce]
+    ) {
+      return true;
+    }
+  }
+  return false;
 }
 
 /**
