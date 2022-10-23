@@ -276,6 +276,24 @@ export function RAND_32(): u32 {
   return n1 | n2 | n3 | n4;
 }
 
+export const START_FEN =
+  'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
+export const POSITION_2 =
+  'r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - ';
+
+export const POSITION_3 = '8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - ';
+export const POSITION_4 =
+  'r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1';
+
+export const POSITION_5 =
+  'rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8';
+
+export const PceChar = '.PNBRQKpnbrqk';
+export const SideChar = 'wb-';
+export const RankChar = '12345678';
+export const FileChar = 'abcdefgh';
+
 /**
  *
  *
@@ -285,6 +303,61 @@ export function RAND_32(): u32 {
  *
  *
  */
+
+export function PrintBoard(): void {
+  console.log('\nGame Board:\n');
+
+  const rank8 = RANKS.get('RANK_8');
+  const rank1 = RANKS.get('RANK_1');
+  const fileA = FILES.get('FILE_A');
+  const fileH = FILES.get('FILE_H');
+
+  for (let rank = rank8; rank >= rank1; rank--) {
+    let line = RankChar.at(rank) + '  ';
+    for (let file = fileA; file <= fileH; file++) {
+      const sq = FR2SQ(file, rank);
+      const piece = pieces[sq];
+      line += ` ${PceChar.at(piece)} `;
+    }
+    console.log(line);
+  }
+
+  console.log('');
+  let line = '   ';
+  for (let file = fileA; file <= fileH; file++) {
+    line += ` ${FileChar.at(file)} `;
+  }
+  console.log(line);
+  console.log(`side: ${SideChar.at(side)}`);
+  console.log(`enPas: ${enPas}`);
+  line = '';
+  if ((castlePerm & CASTLEBIT.get('WKCA')) > 0) {
+    line += 'K';
+  } else {
+    line += '-';
+  }
+
+  if ((castlePerm & CASTLEBIT.get('WQCA')) > 0) {
+    line += 'Q';
+  } else {
+    line += '-';
+  }
+
+  if ((castlePerm & CASTLEBIT.get('BKCA')) > 0) {
+    line += 'k';
+  } else {
+    line += '-';
+  }
+
+  if ((castlePerm & CASTLEBIT.get('BQCA')) > 0) {
+    line += 'q';
+  } else {
+    line += '-';
+  }
+
+  console.log(`castle: ${line}`);
+  console.log(`key: ${posKey.toString(16)}`);
+}
 
 export function PCEINDEX(pce: u32, pceNum: u32): u32 {
   return pce * 10 + pceNum;
@@ -405,64 +478,51 @@ export function ParseFen(fen: string): void {
 
   while (rank >= RANKS.get('RANK_1') && fenCnt < fen.length) {
     count = 1;
-
-    switch (fen.at(fenCnt)) {
-      case 'p':
-        piece = PIECES.get('bP');
-        break;
-      case 'r':
-        piece = PIECES.get('bR');
-        break;
-      case 'n':
-        piece = PIECES.get('bN');
-        break;
-      case 'b':
-        piece = PIECES.get('bB');
-        break;
-      case 'k':
-        piece = PIECES.get('bK');
-        break;
-      case 'q':
-        piece = PIECES.get('bQ');
-        break;
-      case 'P':
-        piece = PIECES.get('wP');
-        break;
-      case 'R':
-        piece = PIECES.get('wR');
-        break;
-      case 'N':
-        piece = PIECES.get('wN');
-        break;
-      case 'B':
-        piece = PIECES.get('wB');
-        break;
-      case 'K':
-        piece = PIECES.get('wK');
-        break;
-      case 'Q':
-        piece = PIECES.get('wQ');
-        break;
-      case '1':
-      case '2':
-      case '3':
-      case '4':
-      case '5':
-      case '6':
-      case '7':
-      case '8':
-        piece = PIECES.get('EMPTY');
-        count = parseInt(fen.at(fenCnt));
-        break;
-      case '/':
-      case ' ':
-        rank--;
-        file = FILES.get('FILE_A');
-        fenCnt++;
-        continue;
-      default:
-        console.log('FEN error');
-        return;
+    const l = fen.at(fenCnt);
+    if (l === 'p') {
+      piece = PIECES.get('bP');
+    } else if (l === 'r') {
+      piece = PIECES.get('bR');
+    } else if (l === 'n') {
+      piece = PIECES.get('bN');
+    } else if (l === 'b') {
+      piece = PIECES.get('bB');
+    } else if (l === 'k') {
+      piece = PIECES.get('bK');
+    } else if (l === 'q') {
+      piece = PIECES.get('bQ');
+    } else if (l === 'P') {
+      piece = PIECES.get('wP');
+    } else if (l === 'R') {
+      piece = PIECES.get('wR');
+    } else if (l === 'N') {
+      piece = PIECES.get('wN');
+    } else if (l === 'B') {
+      piece = PIECES.get('wB');
+    } else if (l === 'K') {
+      piece = PIECES.get('wK');
+    } else if (l === 'Q') {
+      piece = PIECES.get('wQ');
+    } else if (
+      l === '1' ||
+      l === '2' ||
+      l === '3' ||
+      l === '4' ||
+      l === '5' ||
+      l === '6' ||
+      l === '7' ||
+      l === '8'
+    ) {
+      piece = PIECES.get('EMPTY');
+      count = i32(parseInt(fen.at(fenCnt)));
+    } else if (l === '/' || l === ' ') {
+      rank--;
+      file = FILES.get('FILE_A');
+      fenCnt++;
+      continue;
+    } else {
+      console.log('FEN error');
+      return;
     }
 
     for (let i = 0; i < count; i++) {
@@ -480,21 +540,16 @@ export function ParseFen(fen: string): void {
     if (fen.at(fenCnt) === ' ') {
       break;
     }
-    switch (fen.at(fenCnt)) {
-      case 'K':
-        castlePerm |= CASTLEBIT.get('WKCA');
-        break;
-      case 'Q':
-        castlePerm |= CASTLEBIT.get('WQCA');
-        break;
-      case 'k':
-        castlePerm |= CASTLEBIT.get('BKCA');
-        break;
-      case 'q':
-        castlePerm |= CASTLEBIT.get('BQCA');
-        break;
-      default:
-        break;
+
+    const l = fen.at(fenCnt);
+    if (l === 'K') {
+      castlePerm |= CASTLEBIT.get('WKCA');
+    } else if (l === 'Q') {
+      castlePerm |= CASTLEBIT.get('WQCA');
+    } else if (l === 'k') {
+      castlePerm |= CASTLEBIT.get('BKCA');
+    } else if (l === 'q') {
+      castlePerm |= CASTLEBIT.get('BQCA');
     }
     fenCnt++;
   }
@@ -525,6 +580,8 @@ export function init(): void {
   InitFilesRanksBrd();
   InitHashKeys();
   InitSq120ToSq64();
+  ParseFen(POSITION_2);
+  PrintBoard();
 }
 
 export function InitFilesRanksBrd(): void {
