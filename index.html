@@ -1,17 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <link rel="stylesheet" href="style.css" />
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.js"
       integrity="sha512-CX7sDOp7UTAq+i1FYIlf9Uo27x4os+kGeoT7rgwvY+4dmjqV0IuE/Bl5hVsjnQPQiTOhAX1O2r2j5bjsFBvv/A=="
       crossorigin="anonymous"
     ></script>
+  </head>
+  <body>
+    <header>
+      <h3>JS Chess</h3>
+    </header>
+    <div id="FenInDiv">
+      Fen: <br />
+      <input type="text" id="fenIn" />
+      <button id="SetFen">Set Position</button>
+    </div>
     <script type="module">
-      import { init } from './build/release.js';
+      import { init, ParseFen, PrintBoard } from './build/release.js';
       $(() => {
         init();
+        $('#SetFen').on('click', function () {
+          var fenStr = $('#fenIn').val();
+          ParseFen(fenStr);
+          PrintBoard();
+        });
       });
     </script>
-  </head>
-  <body></body>
+  </body>
 </html>
