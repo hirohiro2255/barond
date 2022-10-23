@@ -298,6 +298,20 @@ export const FileChar = 'abcdefgh';
  *
  *
  *
+ *  io.js
+ *
+ *
+ *
+ */
+
+export function PrSq(sq: u32): string {
+  return FileChar.at(FilesBrd[sq]) + RankChar.at(RanksBrd[sq]);
+}
+
+/**
+ *
+ *
+ *
  *  board.js
  *
  *
@@ -316,7 +330,7 @@ export function PrintBoard(): void {
     let line = RankChar.at(rank) + '  ';
     for (let file = fileA; file <= fileH; file++) {
       const sq = FR2SQ(file, rank);
-      const piece = pieces[sq];
+      const piece = GameBoard_pieces[sq];
       line += ` ${PceChar.at(piece)} `;
     }
     console.log(line);
@@ -328,52 +342,52 @@ export function PrintBoard(): void {
     line += ` ${FileChar.at(file)} `;
   }
   console.log(line);
-  console.log(`side: ${SideChar.at(side)}`);
-  console.log(`enPas: ${enPas}`);
+  console.log(`side: ${SideChar.at(GameBoard_side)}`);
+  console.log(`enPas: ${GameBoard_enPas}`);
   line = '';
-  if ((castlePerm & CASTLEBIT.get('WKCA')) > 0) {
+  if ((GameBoard_castlePerm & CASTLEBIT.get('WKCA')) > 0) {
     line += 'K';
   } else {
     line += '-';
   }
 
-  if ((castlePerm & CASTLEBIT.get('WQCA')) > 0) {
+  if ((GameBoard_castlePerm & CASTLEBIT.get('WQCA')) > 0) {
     line += 'Q';
   } else {
     line += '-';
   }
 
-  if ((castlePerm & CASTLEBIT.get('BKCA')) > 0) {
+  if ((GameBoard_castlePerm & CASTLEBIT.get('BKCA')) > 0) {
     line += 'k';
   } else {
     line += '-';
   }
 
-  if ((castlePerm & CASTLEBIT.get('BQCA')) > 0) {
+  if ((GameBoard_castlePerm & CASTLEBIT.get('BQCA')) > 0) {
     line += 'q';
   } else {
     line += '-';
   }
 
   console.log(`castle: ${line}`);
-  console.log(`key: ${posKey.toString(16)}`);
+  console.log(`key: ${GameBoard_posKey.toString(16)}`);
 }
 
-export function PCEINDEX(pce: u32, pceNum: u32): u32 {
-  return pce * 10 + pceNum;
+export function PCEINDEX(pce: u32, n: u32): u32 {
+  return pce * 10 + n;
 }
 
-let pieces: Array<u32> = new Array<u32>(BRD_SQ_NUM);
-let side: u32 = COLOURS.get('WHITE');
-let fiftyMove: u32 = 0;
-let hisPly: u32 = 0;
-let ply: u32 = 0;
-let enPas: u32 = 0;
-let castlePerm: u32 = 0;
-let material: Array<u32> = new Array<u32>(2); // WHITE,BLACK material of pieces
-let pceNum: Array<u32> = new Array<u32>(13); // indexed by Pce
-let pList: Array<u32> = new Array<u32>(14 * 10);
-let posKey: u32 = 0;
+let GameBoard_pieces: Array<u32> = new Array<u32>(BRD_SQ_NUM);
+let GameBoard_side: u32 = COLOURS.get('WHITE');
+let GameBoard_fiftyMove: u32 = 0;
+let GameBoard_hisPly: u32 = 0;
+let GameBoard_ply: u32 = 0;
+let GameBoard_enPas: u32 = 0;
+let GameBoard_castlePerm: u32 = 0;
+let GameBoard_material: Array<u32> = new Array<u32>(2); // WHITE,BLACK material of pieces
+let GameBoard_pceNum: Array<u32> = new Array<u32>(13); // indexed by Pce
+let GameBoard_pList: Array<u32> = new Array<u32>(14 * 10);
+let GameBoard_posKey: u32 = 0;
 
 export const moveList = new Array<u32>(MAXDEPTH * MAXPOSITIONMOVES);
 export const moveScores = new Array<u32>(MAXDEPTH * MAXPOSITIONMOVES);
@@ -413,7 +427,7 @@ export function GeneratePosKey(): u32 {
   let piece = PIECES.get('EMPTY');
 
   for (let sq = 0; sq < BRD_SQ_NUM; sq++) {
-    piece = pieces[sq];
+    piece = GameBoard_pieces[sq];
     const empty = PIECES.get('EMPTY');
     const offBoard = SQUARES.get('OFFBOARD');
     if (piece !== empty && piece !== offBoard) {
@@ -421,48 +435,75 @@ export function GeneratePosKey(): u32 {
     }
   }
 
-  if (side === COLOURS.get('WHITE')) {
+  if (GameBoard_side === COLOURS.get('WHITE')) {
     finalKey ^= SideKey;
   }
 
-  if (enPas !== SQUARES.get('NO_SQ')) {
-    finalKey ^= PieceKeys[enPas];
+  if (GameBoard_enPas !== SQUARES.get('NO_SQ')) {
+    finalKey ^= PieceKeys[GameBoard_enPas];
   }
 
-  finalKey ^= CastleKeys[castlePerm];
+  finalKey ^= CastleKeys[GameBoard_castlePerm];
 
   return finalKey;
 }
 
-export function ResetBoard(): void {
-  for (let i = 0; i < BRD_SQ_NUM; i++) {
-    pieces[i] = SQUARES.get('OFFBOARD');
+export function PrintPieceLists(): void {
+  for (let piece = PIECES.get('wP'); piece <= PIECES.get('bK'); piece++) {
+    for (let pceNum: u32 = 0; pceNum < GameBoard_pceNum[piece]; pceNum++) {
+      console.log(
+        `Piece ${PceChar.at(piece)} on ${PrSq(
+          GameBoard_pList[PCEINDEX(piece, pceNum)]
+        )}`
+      );
+    }
   }
+}
 
-  for (let i = 0; i < 64; i++) {
-    pieces[SQ120(i)] = PIECES.get('EMPTY');
-  }
-
+export function UpdateListsMaterial(): void {
   for (let i = 0; i < 14 * 120; i++) {
-    pList[i] = PIECES.get('EMPTY');
+    GameBoard_pList[i] = PIECES.get('EMPTY');
   }
 
   for (let i = 0; i < 2; i++) {
-    material[i] = 0;
+    GameBoard_material[i] = 0;
   }
 
   for (let i = 0; i < 13; i++) {
-    pceNum[i] = 0;
+    GameBoard_pceNum[i] = 0;
   }
 
-  side = COLOURS.get('BOTH');
-  enPas = SQUARES.get('NO_SQ');
-  fiftyMove = 0;
-  ply = 0;
-  hisPly = 0;
-  castlePerm = 0;
-  posKey = 0;
-  moveListStart[ply] = 0;
+  for (let i = 0; i < 64; i++) {
+    const sq = SQ120(i);
+    const piece = GameBoard_pieces[sq];
+    if (piece !== PIECES.get('EMPTY')) {
+      const colour = PieceCol[piece];
+      GameBoard_material[colour] += PieceVal[piece];
+      GameBoard_pList[PCEINDEX(piece, GameBoard_pceNum[piece])] = sq;
+      GameBoard_pceNum[piece]++;
+    }
+  }
+
+  PrintPieceLists();
+}
+
+export function ResetBoard(): void {
+  for (let i = 0; i < BRD_SQ_NUM; i++) {
+    GameBoard_pieces[i] = SQUARES.get('OFFBOARD');
+  }
+
+  for (let i = 0; i < 64; i++) {
+    GameBoard_pieces[SQ120(i)] = PIECES.get('EMPTY');
+  }
+
+  GameBoard_side = COLOURS.get('BOTH');
+  GameBoard_enPas = SQUARES.get('NO_SQ');
+  GameBoard_fiftyMove = 0;
+  GameBoard_ply = 0;
+  GameBoard_hisPly = 0;
+  GameBoard_castlePerm = 0;
+  GameBoard_posKey = 0;
+  moveListStart[GameBoard_ply] = 0;
 }
 
 export function ParseFen(fen: string): void {
@@ -527,13 +568,14 @@ export function ParseFen(fen: string): void {
 
     for (let i = 0; i < count; i++) {
       sq120 = FR2SQ(file, rank);
-      pieces[sq120] = piece;
+      GameBoard_pieces[sq120] = piece;
       file++;
     }
     fenCnt++;
   } // while loop ends
 
-  side = fen.at(fenCnt) === 'w' ? COLOURS.get('WHITE') : COLOURS.get('BLACK');
+  GameBoard_side =
+    fen.at(fenCnt) === 'w' ? COLOURS.get('WHITE') : COLOURS.get('BLACK');
   fenCnt += 2;
 
   for (let i = 0; i < 4; i++) {
@@ -543,13 +585,13 @@ export function ParseFen(fen: string): void {
 
     const l = fen.at(fenCnt);
     if (l === 'K') {
-      castlePerm |= CASTLEBIT.get('WKCA');
+      GameBoard_castlePerm |= CASTLEBIT.get('WKCA');
     } else if (l === 'Q') {
-      castlePerm |= CASTLEBIT.get('WQCA');
+      GameBoard_castlePerm |= CASTLEBIT.get('WQCA');
     } else if (l === 'k') {
-      castlePerm |= CASTLEBIT.get('BKCA');
+      GameBoard_castlePerm |= CASTLEBIT.get('BKCA');
     } else if (l === 'q') {
-      castlePerm |= CASTLEBIT.get('BQCA');
+      GameBoard_castlePerm |= CASTLEBIT.get('BQCA');
     }
     fenCnt++;
   }
@@ -559,10 +601,11 @@ export function ParseFen(fen: string): void {
     file = fen.at(fenCnt).charCodeAt(0) - 'a'.charCodeAt(0);
     rank = fen.at(fenCnt + 1).charCodeAt(0) - '1'.charCodeAt(0);
     console.log(`fen[fenCnt]: ${fen.at(fenCnt)}, File: ${file}, Rank: ${rank}`);
-    enPas = FR2SQ(file, rank);
+    GameBoard_enPas = FR2SQ(file, rank);
   }
 
-  posKey = GeneratePosKey();
+  GameBoard_posKey = GeneratePosKey();
+  UpdateListsMaterial();
 }
 
 /**
@@ -580,7 +623,7 @@ export function init(): void {
   InitFilesRanksBrd();
   InitHashKeys();
   InitSq120ToSq64();
-  ParseFen(POSITION_2);
+  ParseFen(START_FEN);
   PrintBoard();
 }
 
