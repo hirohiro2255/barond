@@ -428,9 +428,9 @@ let GameBoard_pceNum: Array<u32> = new Array<u32>(13); // indexed by Pce
 let GameBoard_pList: Array<u32> = new Array<u32>(14 * 10);
 let GameBoard_posKey: u32 = 0;
 
-export const moveList = new Array<u32>(MAXDEPTH * MAXPOSITIONMOVES);
-export const moveScores = new Array<u32>(MAXDEPTH * MAXPOSITIONMOVES);
-export const moveListStart = new Array<u32>(MAXDEPTH);
+export const GameBoard_moveList = new Array<u32>(MAXDEPTH * MAXPOSITIONMOVES);
+export const GameBoard_moveScores = new Array<u32>(MAXDEPTH * MAXPOSITIONMOVES);
+export const GameBoard_moveListStart = new Array<u32>(MAXDEPTH);
 
 /*
 
@@ -542,7 +542,7 @@ export function ResetBoard(): void {
   GameBoard_hisPly = 0;
   GameBoard_castlePerm = 0;
   GameBoard_posKey = 0;
-  moveListStart[GameBoard_ply] = 0;
+  GameBoard_moveListStart[GameBoard_ply] = 0;
 }
 
 export function ParseFen(fen: string): void {
@@ -764,6 +764,31 @@ function MOVE(
   flag: u32
 ): u32 {
   return from | (to << 7) | (captured << 14) | (promoted << 20) | flag;
+}
+
+/*
+	GameBoard.moveListStart[] -> 'index' for the first move at a given ply
+	GameBoard.moveList[index] 
+	
+	say ply 1 loop all moves
+	for(index = GameBoard.moveListStart[1]; index < GameBoard.moveListStart[2]; ++index)
+		move = moveList[index];
+		
+		.. use move
+		
+		
+	GameBoard.moveListStart[2]	 = GameBoard.moveListStart[1];
+	
+	AddMOve(Move) {
+	GameBoard.moveList[GameBoard.moveListStart[2]] = Move;
+	GameBoard.moveListStart[2]++;
+	}
+	
+*/
+
+export function GenerateMoves(): void {
+  GameBoard_moveListStart[GameBoard_ply + 1] =
+    GameBoard_moveListStart[GameBoard_ply];
 }
 
 /**
