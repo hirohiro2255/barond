@@ -789,6 +789,92 @@ function MOVE(
 export function GenerateMoves(): void {
   GameBoard_moveListStart[GameBoard_ply + 1] =
     GameBoard_moveListStart[GameBoard_ply];
+
+  if (GameBoard_side === COLOURS.get('WHITE')) {
+    let pceType = PIECES.get('wP');
+
+    for (let pceNum = 0; pceNum < GameBoard_pceNum[pceType]; pceNum++) {
+      const sq = GameBoard_pList[PCEINDEX(pceType, pceNum)];
+
+      if (GameBoard_pieces[sq + 10] === PIECES.get('EMPTY')) {
+        // Add Pawn Move Here
+        if (
+          RanksBrd[sq] === RANKS.get('RANK_2') &&
+          GameBoard_pieces[sq + 20] === PIECES.get('EMPTY')
+        ) {
+          // Add quiet move here
+        }
+      }
+
+      if (
+        SQOFFBOARD(sq + 9) === false &&
+        PieceCol[GameBoard_pieces[sq + 9]] === COLOURS.get('BLACK')
+      ) {
+        // Add pawn capture move
+      }
+
+      if (
+        SQOFFBOARD(sq + 11) === false &&
+        PieceCol[GameBoard_pieces[sq + 11]] === COLOURS.get('BLACK')
+      ) {
+        // Add pawn capture move
+      }
+
+      if (GameBoard_enPas !== SQUARES.get('NO_SQ')) {
+        if (sq + 9 === GameBoard_enPas) {
+          // Add en passant move
+        }
+
+        if (sq + 11 === GameBoard_enPas) {
+          // Add en passant move
+        }
+      }
+    }
+
+    pceType = PIECES.get('wN');
+  } else {
+    let pceType = PIECES.get('bP');
+
+    for (let pceNum = 0; pceNum < GameBoard_pceNum[pceType]; pceNum++) {
+      const sq = GameBoard_pList[PCEINDEX(pceType, pceNum)];
+
+      if (GameBoard_pieces[sq - 10] === PIECES.get('EMPTY')) {
+        // Add pawn move here
+        if (
+          RanksBrd[sq] === RANKS.get('RANK_7') &&
+          GameBoard_pieces[sq - 20] === PIECES.get('EMPTY')
+        ) {
+          // Add quiet move here
+        }
+      }
+
+      if (
+        SQOFFBOARD(sq - 9) === false &&
+        PieceCol[GameBoard_pieces[sq - 9]] === COLOURS.get('WHITE')
+      ) {
+        // Add pawn capture move
+      }
+
+      if (
+        SQOFFBOARD(sq - 11) === false &&
+        PieceCol[GameBoard_pieces[sq - 11]] === COLOURS.get('WHITE')
+      ) {
+        // Add pawn capture move
+      }
+
+      if (GameBoard_enPas !== SQUARES.get('NO_SQ')) {
+        if (sq - 9 === GameBoard_enPas) {
+          // Add en passant square
+        }
+
+        if (sq - 11 === GameBoard_enPas) {
+          // Add en passant square
+        }
+      }
+    }
+
+    pceType = PIECES.get('bN');
+  }
 }
 
 /**
