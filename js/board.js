@@ -89,6 +89,21 @@ function GeneratePosKey() {
   return finalKey;
 }
 
+function PrintPieceLists() {
+  var piece, pceNum;
+
+  for (piece = PIECES.wP; piece <= PIECES.bK; ++piece) {
+    for (pceNum = 0; pceNum < GameBoard.pceNum[piece]; ++pceNum) {
+      console.log(
+        'Piece ' +
+          PceChar[piece] +
+          ' on ' +
+          PrSq(GameBoard.pList[PCEINDEX(piece, pceNum)])
+      );
+    }
+  }
+}
+
 function UpdateListsMaterial() {
   var piece, sq, index, colour;
 
@@ -108,7 +123,6 @@ function UpdateListsMaterial() {
     sq = SQ120(index);
     piece = GameBoard.pieces[sq];
     if (piece != PIECES.EMPTY) {
-      console.log('piece ' + piece + ' on ' + sq);
       colour = PieceCol[piece];
 
       GameBoard.material[colour] += PieceVal[piece];
@@ -117,6 +131,8 @@ function UpdateListsMaterial() {
       GameBoard.pceNum[piece]++;
     }
   }
+
+  PrintPieceLists();
 }
 
 function ResetBoard() {
@@ -263,4 +279,27 @@ function ParseFen(fen) {
 
   GameBoard.posKey = GeneratePosKey();
   UpdateListsMaterial();
+  SqAttacked(21, 0);
+}
+
+function SqAttacked(sq, side) {
+  var pce;
+  var t_sq;
+  var index;
+
+  if (side == COLOURS.WHITE) {
+    if (
+      GameBoard.pieces[sq - 11] == PIECES.wP ||
+      GameBoard.pieces[sq - 9] == PIECES.wP
+    ) {
+      return BOOL.TRUE;
+    }
+  } else {
+    if (
+      GameBoard.pieces[sq + 11] == PIECES.bP ||
+      GameBoard.pieces[sq + 9] == PIECES.bP
+    ) {
+      return BOOL.TRUE;
+    }
+  }
 }

@@ -53,7 +53,7 @@ RANKS.set('RANK_7', 6);
 RANKS.set('RANK_8', 7);
 RANKS.set('RANK_NONE', 8);
 
-export const COLOURS = new Map<string, i32>();
+export const COLOURS = new Map<string, u32>();
 COLOURS.set('WHITE', 0);
 COLOURS.set('BLACK', 1);
 COLOURS.set('BOTH', 2);
@@ -606,6 +606,26 @@ export function ParseFen(fen: string): void {
 
   GameBoard_posKey = GeneratePosKey();
   UpdateListsMaterial();
+}
+
+export function SqAttacked(sq: u32, side: u32): bool {
+  if (side === COLOURS.get('WHITE')) {
+    // white pawns
+    if (
+      GameBoard_pieces[sq - 11] === PIECES.get('wP') ||
+      GameBoard_pieces[sq - 9] === PIECES.get('wP')
+    ) {
+      return true;
+    }
+  } else {
+    // black pawns
+    if (
+      GameBoard_pieces[sq + 11] === PIECES.get('bP') ||
+      GameBoard_pieces[sq + 9] === PIECES.get('bP')
+    ) {
+      return true;
+    }
+  }
 }
 
 /**
