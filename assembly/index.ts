@@ -611,6 +611,30 @@ export function ParseFen(fen: string): void {
 
   GameBoard_posKey = GeneratePosKey();
   UpdateListsMaterial();
+  PrintSqAttacked();
+}
+
+export function PrintSqAttacked(): void {
+  console.log('\nAttacked:\n');
+
+  const rank1 = RANKS.get('RANK_1');
+  const rank8 = RANKS.get('RANK_8');
+  const fileA = FILES.get('FILE_A');
+  const fileH = FILES.get('FILE_H');
+
+  for (let rank = rank8; rank >= rank1; rank--) {
+    let line = `${rank + 1}  `;
+    for (let file = fileA; file <= fileH; file++) {
+      const sq = FR2SQ(file, rank);
+      let piece: string;
+      if (SqAttacked(sq, GameBoard_side)) piece = 'X';
+      else piece = '-';
+
+      line += ` ${piece} `;
+    }
+    console.log(line);
+  }
+  console.log('');
 }
 
 export function SqAttacked(sq: u32, side: u32): bool {
