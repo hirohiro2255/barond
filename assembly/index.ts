@@ -831,6 +831,37 @@ export function GenerateMoves(): void {
       }
     }
 
+    // white king side castling
+    if ((GameBoard_castlePerm & CASTLEBIT.get('WKCA')) > 0) {
+      if (
+        GameBoard_pieces[SQUARES.get('F1')] === PIECES.get('EMPTY') &&
+        GameBoard_pieces[SQUARES.get('G1')] === PIECES.get('EMPTY')
+      ) {
+        if (
+          !SqAttacked(SQUARES.get('F1'), COLOURS.get('BLACK')) &&
+          !SqAttacked(SQUARES.get('E1'), COLOURS.get('BLACK'))
+        ) {
+          // Add quiet move
+        }
+      }
+    }
+
+    // white queen side castling
+    if ((GameBoard_castlePerm & CASTLEBIT.get('WQCA')) > 0) {
+      if (
+        GameBoard_pieces[SQUARES.get('D1')] === PIECES.get('EMPTY') &&
+        GameBoard_pieces[SQUARES.get('C1')] === PIECES.get('EMPTY') &&
+        GameBoard_pieces[SQUARES.get('B1')] === PIECES.get('EMPTY')
+      ) {
+        if (
+          !SqAttacked(SQUARES.get('D1'), COLOURS.get('BLACK')) &&
+          !SqAttacked(SQUARES.get('E1'), COLOURS.get('BLACK'))
+        ) {
+          // Add quiet move
+        }
+      }
+    }
+
     pceType = PIECES.get('wN');
   } else {
     let pceType = PIECES.get('bP');
@@ -869,6 +900,37 @@ export function GenerateMoves(): void {
 
         if (sq - 11 === GameBoard_enPas) {
           // Add en passant square
+        }
+      }
+    }
+
+    // black king side castling
+    if ((GameBoard_castlePerm & CASTLEBIT.get('BKCA')) > 0) {
+      if (
+        GameBoard_pieces[SQUARES.get('F8')] === PIECES.get('EMPTY') &&
+        GameBoard_pieces[SQUARES.get('G8')] === PIECES.get('EMPTY')
+      ) {
+        if (
+          !SqAttacked(SQUARES.get('F8'), COLOURS.get('WHITE')) &&
+          !SqAttacked(SQUARES.get('E8'), COLOURS.get('WHITE'))
+        ) {
+          // Add quiet move
+        }
+      }
+    }
+
+    // black queen side castling
+    if ((GameBoard_castlePerm & CASTLEBIT.get('BQCA')) > 0) {
+      if (
+        GameBoard_pieces[SQUARES.get('D8')] === PIECES.get('EMPTY') &&
+        GameBoard_pieces[SQUARES.get('C8')] === PIECES.get('EMPTY') &&
+        GameBoard_pieces[SQUARES.get('B8')] === PIECES.get('EMPTY')
+      ) {
+        if (
+          !SqAttacked(SQUARES.get('D8'), COLOURS.get('WHITE')) &&
+          !SqAttacked(SQUARES.get('E8'), COLOURS.get('WHITE'))
+        ) {
+          // Add quiet move
         }
       }
     }

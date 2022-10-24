@@ -51,6 +51,35 @@ function GenerateMoves() {
       }
     }
 
+    if (GameBoard.castlePerm & CASTLEBIT.WKCA) {
+      if (
+        GameBoard.pieces[SQUARES.F1] == PIECES.EMTPY &&
+        GameBoard.pieces[SQUARES.G1] == PIECES.EMTPY
+      ) {
+        if (
+          SqAttacked(SQUARES.F1, COLOURS.BLACK) == BOOL.FALSE &&
+          SqAttacked(SQUARES.E1, COLOURS.BLACK) == BOOL.FALSE
+        ) {
+          // Add Quiet Move
+        }
+      }
+    }
+
+    if (GameBoard.castlePerm & CASTLEBIT.WQCA) {
+      if (
+        GameBoard.pieces[SQUARES.D1] == PIECES.EMTPY &&
+        GameBoard.pieces[SQUARES.C1] == PIECES.EMTPY &&
+        GameBoard.pieces[SQUARES.B1] == PIECES.EMTPY
+      ) {
+        if (
+          SqAttacked(SQUARES.D1, COLOURS.BLACK) == BOOL.FALSE &&
+          SqAttacked(SQUARES.E1, COLOURS.BLACK) == BOOL.FALSE
+        ) {
+          // Add Quiet Move
+        }
+      }
+    }
+
     pceType = PIECE.wN;
   } else {
     pceType = PIECES.bP;
@@ -92,7 +121,34 @@ function GenerateMoves() {
         }
       }
     }
+    if (GameBoard.castlePerm & CASTLEBIT.BKCA) {
+      if (
+        GameBoard.pieces[SQUARES.F8] == PIECES.EMTPY &&
+        GameBoard.pieces[SQUARES.G8] == PIECES.EMTPY
+      ) {
+        if (
+          SqAttacked(SQUARES.F8, COLOURS.WHITE) == BOOL.FALSE &&
+          SqAttacked(SQUARES.E8, COLOURS.WHITE) == BOOL.FALSE
+        ) {
+          // Add Quiet Move
+        }
+      }
+    }
 
+    if (GameBoard.castlePerm & CASTLEBIT.BQCA) {
+      if (
+        GameBoard.pieces[SQUARES.D8] == PIECES.EMTPY &&
+        GameBoard.pieces[SQUARES.C8] == PIECES.EMTPY &&
+        GameBoard.pieces[SQUARES.B8] == PIECES.EMTPY
+      ) {
+        if (
+          SqAttacked(SQUARES.D8, COLOURS.WHITE) == BOOL.FALSE &&
+          SqAttacked(SQUARES.E8, COLOURS.WHITE) == BOOL.FALSE
+        ) {
+          // Add Quiet Move
+        }
+      }
+    }
     pceType = PIECE.bN;
   }
 }
